@@ -1,10 +1,23 @@
 <html>
- <head>
-  <title>Editor</title>
-  <script src="js/classmap.js"></script>
-  <link rel="stylesheet" href="css/editor.css">
- </head>
- <body>
-  <h1>Editor</h1>
- </body>
+    <head>
+       <title>Editor</title>
+       <!-- Stylesheets -->
+       <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
+       <link rel="stylesheet" href="css/editor.css">
+       
+       <!-- Javascript Stuff -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+       <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/build/ol.js"></script>
+ 
+       <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+       <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+       
+       <script src="js/classmap.js"></script>
+       
+    </head>
+    <body>
+        <h1>Editor</h1>
+        <div id="map" class="map"></div>
+        <button id="drawNew">Draw Polygon</button>
+    </body>
 </html>
