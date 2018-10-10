@@ -55,8 +55,15 @@ $(function(){
       }
 
     $('#drawNew').on('click', function(){
+        //if(draw)
+        //    console.log(draw.sketchLineCoords_) ;
+        var features = source.getFeatures() ;
+        for(let i=0; i < features.length; i++){
+            console.log(features[i].getGeometry().getCoordinates()) ;
+            
+        }
         map.removeInteraction(draw);
-        console.log(map) ;
+        //console.log(map) ;
         addInteraction();
     }) ;
     
