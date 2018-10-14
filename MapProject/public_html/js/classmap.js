@@ -22,9 +22,32 @@ $(function(){
     }) ;
     
     var source = new ol.source.Vector({wrapX: false});
-
+    
+    var style = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.6)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#319FD3',
+            width: 1
+        }),
+        text: new ol.style.Text({
+            font: '12px Calibri,sans-serif',
+            fill: new ol.style.Fill({
+                color: '#000'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#fff',
+                width: 3
+            })
+        })
+    });
     var vector = new ol.layer.Vector({
-        source: source
+        source: source,
+        style: function(feature) {
+            style.getText().setText(feature.get('name'));
+            return style;
+        }
     });
     
     var view1 = new ol.View({
@@ -42,7 +65,7 @@ $(function(){
     var map = new ol.Map({
       layers: [ baseLayer, vector ],
       target: 'map',
-      view: view1
+      view: view1,
     });
     
     var draw ; // global so we can remove it later
@@ -52,19 +75,82 @@ $(function(){
             type: 'Polygon'
         });
         map.addInteraction(draw);
+        draw.setActive(true) ;
+        
+        draw.on('drawend', function(){
+            map.removeInteraction(draw);
+            draw.setActive(false) ;
+        }) ;
       }
 
     $('#drawNew').on('click', function(){
-        //if(draw)
-        //    console.log(draw.sketchLineCoords_) ;
-        var features = source.getFeatures() ;
-        for(let i=0; i < features.length; i++){
-            console.log(features[i].getGeometry().getCoordinates()) ;
-            
-        }
-        map.removeInteraction(draw);
+        if(draw)
+            map.removeInteraction(draw);
         //console.log(map) ;
         addInteraction();
     }) ;
     
+    $('#drawFinish').on('click', function(){
+        if(draw){
+            map.removeInteraction(draw);
+            draw.setActive(false) ;
+        }
+        let allCoords = [] ;
+        var features = source.getFeatures() ;
+        for(let i=0; i < features.length; i++){
+            let tCoord = features[i].getGeometry().getCoordinates() ;
+            //console.log(tCoord.length + " coords in this feature") ;
+            for(let j=0; j < tCoord.length; j++){
+                allCoords.push(tCoord[j]) ;
+            }
+            //console.log("Feature Number: " + i) ;
+            //console.log('Coordinate ' + i + ": " + tCoord) ;
+            
+        }
+        localStorage.removeItem('myCoords') ;
+        //console.log(JSON.stringify(allCoords)) ;
+        localStorage.setItem('myCoords', JSON.stringify(allCoords) );
+    }) ;
+    
+    
+    let baseCoords = localStorage.getItem('myCoords') ;
+    //console.log(baseCoords) ;
+    if(baseCoords && baseCoords.length){
+        let polys = JSON.parse(baseCoords) ;
+        //console.log(polys) ;
+        addMyPolygon(polys) ;
+    }
+    
+    
+    function addMyPolygon(polyCoords){
+        //console.log(polyCoords);
+        let newFeature = new ol.Feature({
+            geometry: new ol.geom.Polygon(polyCoords),
+            name: 'New Poly',
+            url: 'https://www.google.com',
+        }) ;
+        //let someStyle = newFeature.getStyle() ;
+        //console.log(someStyle) ;
+        source.addFeature(newFeature) ;
+        
+        //console.log(source) ;
+    }
+    
+    
+    map.on('click', function(evt) {
+        //console.log('map clicked');
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+          function(feature, layer) {
+                // do stuff here
+                if(draw){
+                    console.log( draw.getActive() ) ;
+                }
+                
+                if(feature.values_.url && (!draw || !draw.getActive())){
+                    window.open(feature.values_.url, '_blank') ;
+                }
+          });
+    });
+    
 });
+
