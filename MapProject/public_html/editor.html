@@ -1,10 +1,176 @@
+<!--
+	File Name:		editor.html
+	Purpose:		UI for image mapping editor
+	
+	Modification History:
+		October 7, 2018 - Polygon Add button and Title box
+-->
+
 <html>
- <head>
-  <title>Editor</title>
-  <script src="js/classmap.js"></script>
-  <link rel="stylesheet" href="css/editor.css">
- </head>
- <body>
-  <h1>Editor</h1>
- </body>
+	<head>
+		<meta charset="UTF-8">
+		<title>Editor</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+		<script src = "js/classmap.js"> </script>
+		<script src = "js/edit_buttons.js"> </script>
+		<link rel = "stylesheet" href = "css/editor.css">
+	</head>
+	<body>
+		<h1>Editor</h1>
+		
+		<div style="position:relative; width: 800px; left: 50%; transform: translate(-50%,0); margin: 20px">
+            <!-- Button trigger modal -->
+            <button id="clear" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Load Image form Website
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Load Image form Website</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group">
+                                    <input id="url" type="text" class="form-control" placeholder="Search for...">
+                                    <span id="cross" class="input-group-btn" style="display: none;">
+                                        <img src="imgs/cross.png" height="36">
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div><!-- /.row -->
+                    </div>
+                    <div class="modal-footer">
+                        <button id="close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button id="Continue" type="button" class="btn btn-primary">Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="position:relative; width: 800px; left: 50%; transform: translate(-50%,0); margin: 20px">
+            <div id="imgContainer" style="display: none;">
+                <canvas id="cvs"  width="800" height="400" style="margin:20px auto;display: block;">
+                    The browser doesn't support canvas
+                    <!-- If the browser support canvas，then tag content in canvas won't show -->
+                </canvas>
+                <h2>Link</h2>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <input id="link" type="text" class="form-control" placeholder="http://...">
+                        </div><!-- /input-group -->
+                    </div><!-- /.col-lg-6 -->
+                </div>
+            </div>
+        </div>
+		
+		<!--
+			Paragraph for CRUD buttons
+		-->
+		<p>
+			<input type = "button" id = "polyAdd" value = "Add" />
+		</p>
+		
+		<!--
+			Paragraph for polygon definition
+		-->
+		<p id = "polyInput" style = "display : none;">
+			<label id = "polyTitlelbl" for = "polyTitle">Polygon Title: 
+			</label>
+			<input type = "text" id = "polyTitle" value = "" />
+		</p>
+	</body>
 </html>
+<script>
+    const urlInput = $("#url");
+    const imgContainer = $("#imgContainer");
+    //get canvas
+    var cvs = document.getElementById("cvs");
+    var ctx = cvs.getContext('2d');
+
+    $("#clear").click(function () {
+        urlInput.val("");
+        linkInput.val("");
+    });
+
+    function callback(data){
+        console.log(data);
+        return data;
+    }
+    let preW = 800;
+    let preH = 400;
+
+//The image URL part
+    urlInput.on('change',function () {
+        const url = $(this).val();
+        if ((url.startsWith("http://") || url.startsWith("https://"))&&
+            (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif") || url.endsWith(".jpeg")|| url.endsWith(".JPG")|| url.endsWith(".JPEG")|| url.endsWith(".$")|| url.endsWith(".GIF")) ) {
+
+            imgContainer.show();
+            $("#Continue").css("background","#00B0F0");
+            var imgObj = new Image();
+            imgObj.src = url;
+            //After the image is loaded, display it on the canvas.
+            imgObj.onload = function(data){
+                console.log(data);
+                const img = data.path[0];
+                preW = img.width;
+                preH = img.height;
+                cvs.setAttribute("width", preW);
+                cvs.setAttribute("height", preH);
+                ctx.clearRect(0,0,preW,preH);
+
+                ctx = cvs.getContext('2d');
+
+                urlInput.removeClass('redBorder');
+                $("#cross").hide();
+                $("#close").click();
+                // var ctx = cvs.getContext('2d');
+                ctx.drawImage(this, 0, 0);//this is imgObj,keep the image original size ：470*480
+            };
+            imgObj.onerror = function(){
+                console.log('fdf');
+                urlInput.addClass('redBorder');
+                $("#Continue").css("background","#DDDDDD");
+                $("#cross").show()
+            };
+        }else {
+            urlInput.addClass('redBorder');
+            $("#Continue").css("background","#DDDDDD");
+            $("#cross").show();
+        }
+    });
+
+
+//The link part
+    const linkInput = $("#link");
+    linkInput.on("change",function () {
+        const url = $(this).val();
+
+        if ((url.startsWith("http://") || url.startsWith("https://")) ) {
+//Set the link text 
+            ctx.font="bold 14px Arial";
+            ctx.textAlign="start";
+            ctx.textBaseline="middle";
+            ctx.fillText(url,10,80);
+
+            linkInput.removeClass('redBorder');
+        }else {
+            linkInput.addClass('redBorder');
+
+        }
+    });
+</script>
