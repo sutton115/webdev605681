@@ -55,11 +55,11 @@ function clearTextField( elementId )
 
 /*
  Clears the options element within the editor with 
- specified id
+ specified name
 */
-function clearOptions( elementId )
+function clearRadioOptions( elementName )
 {
-	var elements = document.getElementsByName( elementId );
+	var elements = document.getElementsByName( elementName );
 	
 	for( let i = 0; i < elements.length; i++ )
 	{
@@ -171,7 +171,7 @@ function populateImageMap( imageMap )
  * objects derived from the current values
  * of the image map's form fields
  */
-function populateMapShapes( layers[] )
+function populateMapLayers( layers )
 {
 	//TODO: iterate for each layer, read in applicable fields
     // and push each layer onto the provided array 
@@ -189,15 +189,6 @@ function createShapeFromEditor( layerId, shapeEditorId )
 	
 }
 
-
-/*
- * Sets the value of the option element specified
- * by the provided element Id to the value specified
- */
-function setOption( elementId, value )
-{
-	$(elementId).val( value );
-}
 
 /*
  * Sets the value of the specified element to
