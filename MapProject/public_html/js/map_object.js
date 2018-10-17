@@ -29,6 +29,7 @@ function shapePoint(){
  */ 
 function mapShape(){
 	this.type = 'polygon' ;
+	this.id = 0;
 	this.points = [] ;
 	this.title = '' ;
 	this.url = '' ;
@@ -48,6 +49,7 @@ function mapShape(){
  */ 
 function mapLayer(){
 	this.type = 'link';
+	this.id = 0;
 	this.url = '' ;
 	this.shapes = [] ;
 
