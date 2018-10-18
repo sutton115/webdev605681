@@ -247,21 +247,52 @@ function getLayerById( imageMap, layerId )
 /*
  * Creates a new shape editor to allow the user
  * to define an additional shape within the
- * currently selected map layer.
+ * currently selected map layer.  Temporarily 
+ * sets the initial field value to the shape id
+ * at the moment
  */
- function addNewShapeEditor()
- {
-	 var layerId = getSelectedLayerId();
-	 var mapLayer = getLayerById( layerId );
+function addNewShapeEditor()
+{
+	var layerId = getSelectedLayerId();
+	var shapeListName = "layer" + layerId + "shapes"
+	var elements = document.getElementsByName( shapeListName );
+	let nextId = 0;
+
+	if( elements != undefined )
+	 nextId = elements.length + 1;
+	else
+	 nextId = 1;
+
+	let shapeId = "layer" + layerId + "shape" + nextId
+		
+	let editorHtml = "<div id = " + shapeId + "div>";
+		editorHtml = editorHtml.concat( createTextEditor( "Shape Title", shapeId, shapeListName, shapeId ) );
+		editorHtml = editorHtml.concat( "</div>" );
+	$('#shapeInput').append( editorHtml );
 	 
- }
+}
  
- /*
-  * Adds a new layer editor to the image map
-  * editor
-  */
-  function addnewLayerEditor()
-  {
-	  
-  }
+function createTextEditor( label, id, name, defaultValue )
+{
+	if( label == undefined )
+		label = "Label"
+	if( id == undefined )
+		id == ""
+	if( name == undefined )
+		name == ""
+	if( defaultValue == undefined )
+		defaultValue == ""
+		
+	
+	let txtEditor = label + ": <input type = \"text\" id = " + id + " value = " + defaultValue + " name = " + name + " />"
+	return txtEditor;
+}
+ 
+/*
+* Adds a new layer editor to the image map
+* editor
+*/
+function addnewLayerEditor()
+{
   
+}

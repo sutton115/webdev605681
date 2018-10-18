@@ -7,8 +7,7 @@
 		October 17, 2018 - Minor comment change
 */
 
-$(function() {
-	$("#polyAdd").click(function() {
-		$("#polyInput").show();
-	});
+$( function() 
+{
+	$("#shapeAdd").on( "click",  addNewShapeEditor )
 });
