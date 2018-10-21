@@ -229,7 +229,7 @@ function setSelected( elementId, selectedValue )
  */
 function getSelectedLayerId()
 {
-	
+	return 0;
 }
 
 /*
