@@ -269,7 +269,7 @@ function addNewShapeEditor()
 		editorHtml = editorHtml.concat( createTextEditor( "Shape Title", shapeId, shapeListName, shapeId ) );
 		editorHtml = editorHtml.concat( "</div>" );
 	$('#shapeInput').append( editorHtml );
-	 
+	addInteraction() ; 
 }
  
 function createTextEditor( label, id, name, defaultValue )

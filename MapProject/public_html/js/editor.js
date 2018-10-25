@@ -17,7 +17,7 @@ $( function()
 
     $("#clear").click(function () {
         urlInput.val("");
-        linkInput.val("");
+        //linkInput.val("");
     });
 
     function callback(data){
@@ -39,7 +39,7 @@ $( function()
             imgObj.src = url;
             //After the image is loaded, display it on the canvas.
             imgObj.onload = function(data){
-                console.log(data);
+                //console.log(data);
                 const img = data.path[0];
                 preW = img.width;
                 preH = img.height;
@@ -58,7 +58,7 @@ $( function()
                     })
                 }) ;
                 
-                var source = new ol.source.Vector({wrapX: false});
+                source = new ol.source.Vector({wrapX: false});
     
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
@@ -94,10 +94,10 @@ $( function()
                     maxZoom: 8
                 }) ;
 
-                var map = new ol.Map({
+                map = new ol.Map({
                   layers: [ baseLayer, vector ],
                   target: 'map',
-                  view: view1,
+                  view: view1
                 });
                 //cvs.setAttribute("width", preW);
                 //cvs.setAttribute("height", preH);

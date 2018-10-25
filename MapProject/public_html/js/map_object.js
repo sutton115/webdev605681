@@ -6,6 +6,9 @@
 	Modification History:
 */
 
+// Global variables so we can access them later
+var map, draw, source ;
+
 /*
  * Constructs a default shapePoint object
  *
