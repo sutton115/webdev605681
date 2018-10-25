@@ -2,3 +2,47 @@
     height: 400px;
     width: 100%;
 }
+
+input:read-only, select:disabled
+{
+	background-color: lightgray
+}
+
+#shapeListPanel
+{
+	margin : 20px 20px 20px 20px;
+}
+
+#shapeList
+{
+	height : 250px;
+	width : 300px;
+}
+
+#CRUDButtonList
+{
+	display : inline;
+	margin : 20px 0px 0px 20px;
+}
+
+#confirmData
+{
+	display : inline;
+	margin : 50px 0px 0px 20px;
+}
+
+.buttonClass
+{
+	margin : 0px 20px 0px 0px
+}
+
+.shapeEditorComponents
+{
+	display : inline;
+	margin : 20px 0px 0px 20px;
+}
+
+.comboBox
+{
+	width : 100px;
+}

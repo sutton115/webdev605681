@@ -73,21 +73,44 @@
             </div>
         </div>
         
-    <!-- DIV to display the user-provided image -->
-    <div id="map" class="map"></div>
+		<!-- DIV to display the user-provided image -->
+		<div id="map" class="map"></div>
+		
+		<div id="ShapeListPanel" class="form-inline" >		
+		
+			<select id="shapeList" size="7" >
+			</select>	
 
-            <!--
-                    Paragraph for CRUD buttons
-            -->
-            <p>
-                    <input type = "button" id = "shapeAdd" value = "Add" />
-            </p>
-
-            <!--
+			<!--
                     Paragraph for polygon definition
             -->
-            <p id = "shapeInput">
+            <div id = "shapeInput">
+				<div class="shapeEditorComponents">Title: <input type = "text" id = "shapeTitle" /></div>
+				<div class="shapeEditorComponents">Link: <input type = "text" id = "shapeLink" /></div>
+				<div class="shapeEditorComponents">
+					Points:    
+					<select id="pointList" class="comboBox onchange="updateOnPointChange()">
+					</select></div>
+				<div class="shapeEditorComponents">X Pos: <input type = "number" id = "pointX" /></div>
+				<div class="shapeEditorComponents">Y Pos: <input type = "number" id = "pointY" /></div>
+            </div>
+		</div>
 
-            </p>
+            <!--
+                    Div for CRUD buttons
+            -->
+            <div id="CRUDButtonList">
+                    <input type = "button" id = "shapeAdd" class="buttonClass" value = "Add" />
+					<input type = "button" id = "shapeDelete" class="buttonClass" value = "Delete" />
+            </div>
+
+			<p>
+			<!--
+				Div for submittal / cancel buttons
+			-->
+			<div id = "confirmData" class="buttonClass">
+				<input type = "button" id = "submit" class="buttonClass" value = "Submit" />
+				<input type = "button" id = "cancel" class="buttonClass" value = "Cancel" />
+			</div>
     </body>
 </html>

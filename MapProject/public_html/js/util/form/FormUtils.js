@@ -31,6 +31,16 @@ function clearForm()
 function setFormFieldsEnabled( bool )
 {
 	//Add setEnabled calls for form fields here
+	$("#shapeTitle").attr('readonly',!bool);
+	$("#shapeLink").attr('readonly',!bool);
+	$("#pointList").attr('readonly',!bool);
+	$("#pointX").attr('readonly',!bool);
+	$("#pointY").attr('readonly',!bool);
+	$("#submit").attr('disabled',bool);
+	$("#cancel").attr('disabled',bool);
+	
+	if( bool == true )
+	  configureReadOnly();
 }
 
 /*
@@ -41,7 +51,8 @@ function setFormFieldsEnabled( bool )
 */
 function configureReadOnly()
 {
-
+  $("#pointX").attr('readonly', true);
+  $("#pointY").attr('readonly', true);
 }
 
 /*
@@ -238,38 +249,57 @@ function getSelectedLayerId()
  */
 function getLayerById( imageMap, layerId )
 {
-	return imageMap.find( ( map ) => 
+	var mapLayers = imageMap.layers;
+	
+	return mapLayers.find( ( mapLayer ) => 
 	{ 
-		return ( map.layerId == layerId ) 
+		return ( mapLayer.id == layerId ) 
 	} );
 }
 
 /*
- * Creates a new shape editor to allow the user
- * to define an additional shape within the
- * currently selected map layer.  Temporarily 
- * sets the initial field value to the shape id
- * at the moment
+ * Sets the fields and appropriate
+ * buttons to enabled or editable states
+ * to allow modification
  */
-function addNewShapeEditor()
+function addNewShape()
 {
-	var layerId = getSelectedLayerId();
-	var shapeListName = "layer" + layerId + "shapes"
-	var elements = document.getElementsByName( shapeListName );
-	let nextId = 0;
+	//First clear editor fields
+	clearShapeEditor();
+	
+	//Set button enabled state(s)
+	$("#shapeAdd").attr('disabled',true);
+	$("#shapeDelete").attr('disabled',true);
+	$("#submit").attr('disabled',false);
+	$("#cancel").attr('disabled',false);
+	
+	//Set shape editable
+	setShapeEditable( true );
+}
 
-	if( elements != undefined )
-	 nextId = elements.length + 1;
-	else
-	 nextId = 1;
+function clearShapeEditor()
+{
+	// Clear entries
+	$("#shapeTitle").val("");
+	$("#shapeLink").val("");
 
-	let shapeId = "layer" + layerId + "shape" + nextId
+	
+	var points = document.getElementById("pointList");
+	var length = points.options.length;
+	for (i = 0; i < length; i++) 
+	{
+		points.options[i] = null;
+	}
 		
-	let editorHtml = "<div id = " + shapeId + "div>";
-		editorHtml = editorHtml.concat( createTextEditor( "Shape Title", shapeId, shapeListName, shapeId ) );
-		editorHtml = editorHtml.concat( "</div>" );
-	$('#shapeInput').append( editorHtml );
-	 
+	$("#pointX").val("");
+	$("#pointY").val("");
+
+}
+
+function setShapeEditable( bool )
+{
+	$("#shapeTitle").attr('readonly', !bool );
+	$("#shapeLink").attr('readonly', !bool );
 }
  
 function createTextEditor( label, id, name, defaultValue )
@@ -295,4 +325,34 @@ function createTextEditor( label, id, name, defaultValue )
 function addnewLayerEditor()
 {
   
+}
+
+/*
+* Updates object for given data
+*/
+function submitData()
+{
+	
+	// Control actions
+	$("#shapeAdd").attr('disabled',false);
+	$("#shapeDelete").attr('disabled',false);
+	$("#submit").attr('disabled',true);
+	$("#cancel").attr('disabled',true);
+}
+
+/*
+* Clears data without updates
+*/
+function cancelData()
+{
+	//First clear editor fields
+	clearShapeEditor();
+	
+	//Set button enabled state(s)
+	$("#shapeAdd").attr('disabled', false);
+	$("#shapeDelete").attr('disabled', false);
+	$("#submit").attr('disabled', true);
+	$("#cancel").attr('disabled', true );
+	
+	setShapeEditable( false );
 }

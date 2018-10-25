@@ -9,7 +9,17 @@
 
 $( function() 
 {
+	//Set disabled to start
+	$("#shapeTitle").attr('readonly',true);
+	$("#shapeLink").attr('readonly',true);
+	$("#pointList").attr('readonly',true);
+	$("#pointX").attr('readonly',true);
+	$("#pointY").attr('readonly',true);
+	$("#submit").attr('disabled',true);
+	$("#cancel").attr('disabled',true);
+   
     const urlInput = $("#url");
+	
     //const imgContainer = $("#imgContainer");
     //get canvas
     //var cvs = document.getElementById("cvs");
@@ -122,7 +132,7 @@ $( function()
             $("#Continue").css("background","#DDDDDD");
             $("#cross").show();
         }
-    });
+    }); // End URL input change
 
 /* MES - Not positive this is ever called
 //The link part
@@ -144,5 +154,7 @@ $( function()
         }
     }); */
     
-    $("#shapeAdd").on( "click",  addNewShapeEditor )
+    $("#shapeAdd").on( "click", addNewShape )
+	$("#submit").on("click", submitData);
+	$("#cancel").on("click", cancelData);
 });
