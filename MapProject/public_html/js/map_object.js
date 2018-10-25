@@ -103,17 +103,10 @@ function addInteraction() {
     }) ;
 }
 
-$(function(){
-    
-    source = new ol.source.Vector({wrapX: false});
-    
-    source.on('change', function(evt){
-        let vs=evt.target;
-        console.log(vs.getState()) ;
-        if(vs.getState() === 'ready'){
-            console.log(source.getFeatures());
-        }
-    });
-
-
-}) ;
+function getPolygonCoordinates(){
+    let features = source.getFeatures() ;
+    let i = features.length ;
+    let tCoord = features[i].getGeometry().getCoordinates() ;
+    console.log(tCoord) ;
+    return tCoord ;
+}
