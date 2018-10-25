@@ -152,29 +152,3 @@ $(function(){
     
 });
 */
-
-
-function addInteraction() {
-    if(draw)
-        map.removeInteraction(draw);
-    
-    draw = new ol.interaction.Draw({
-        source: source,
-        type: 'Polygon'
-    });
-    map.addInteraction(draw);
-    draw.setActive(true) ;
-
-    draw.on('drawend', function(){
-        map.removeInteraction(draw);
-        draw.setActive(false) ;
-        
-        let features = source.getFeatures() ;
-        console.log(features) ;
-        //let i = features.length ;
-        //let tCoord = features[i].getGeometry().getCoordinates() ;
-        //console.log(tCoord) ;
-        
-    }) ;
-  }
-

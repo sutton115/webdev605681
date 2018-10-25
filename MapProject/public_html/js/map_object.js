@@ -76,3 +76,44 @@ function mapObject(){
 	}	
 }
 
+
+
+function addInteraction() {
+    if(draw)
+        map.removeInteraction(draw);
+    
+    draw = new ol.interaction.Draw({
+        source: source,
+        type: 'Polygon'
+    });
+    map.addInteraction(draw);
+    draw.setActive(true) ;
+
+    draw.on('drawend', function(){
+        map.removeInteraction(draw);
+        draw.setActive(false) ;
+        
+        let features = source.getFeatures() ;
+        //console.log(source.getState()) ;
+        console.log(features) ;
+        //let i = features.length ;
+        //let tCoord = features[i].getGeometry().getCoordinates() ;
+        //console.log(tCoord) ;
+        
+    }) ;
+}
+
+$(function(){
+    
+    source = new ol.source.Vector({wrapX: false});
+    
+    source.on('change', function(evt){
+        let vs=evt.target;
+        console.log(vs.getState()) ;
+        if(vs.getState() === 'ready'){
+            console.log(source.getFeatures());
+        }
+    });
+
+
+}) ;
