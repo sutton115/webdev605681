@@ -13,7 +13,7 @@ var map, draw, source ;
  * Constructs a default shapePoint object
  *
  */ 
-function shapePoint(){
+function ShapePoint(){
 	this.x = 0 ;
 	this.y = 0 ;
 	
@@ -31,7 +31,7 @@ function shapePoint(){
  * Constructs a default mapShape object
  *
  */ 
-function mapShape(){
+function MapShape(){
 	this.type = 'polygon' ;
 	this.id = 0;
 	this.points = [] ;
@@ -54,7 +54,7 @@ function mapShape(){
  * Constructs a default mapLayer object
  *
  */ 
-function mapLayer(){
+function MapLayer(){
 	this.type = 'link';
 	this.id = 0;
 	this.url = '' ;
@@ -71,18 +71,17 @@ function mapLayer(){
  * Constructs a default mapObject object
  *
  */
-function mapObject(){
+function MapObject()
+{
 	this.objType = 'mapObject' ;
-	this.title = '' ;
-	this.layers = [] ;
+	this.title = '';
+	this.layers = [];
 	
-	function addLayer(obj)
+	this.addLayer = function(obj)
 	{
 		this.layers.push(obj) ;
 	}	
 }
-
-
 
 function addInteraction() {
     if(draw)
@@ -95,16 +94,43 @@ function addInteraction() {
     map.addInteraction(draw);
     draw.setActive(true) ;
 
-    draw.on('drawend', function(){
+    draw.on('drawend', function()
+	{
         map.removeInteraction(draw);
         //draw.setActive(false) ;
-    }) ;
+    });
+	
+	source.on('addfeature', function (event) 
+	{
+		var feature = event.feature;
+		
+		if( feature != undefined )
+		{
+			if( feature.getId() == undefined )
+				feature.setId( Math.floor( Math.random() * 1000000 ) );
+			var points = getPolygonCoordinates();
+			//This is a hack until I can figure out
+			//how to correctly execute this logic only
+			//once
+			clearShapePointList();
+			populateShapePointList( points );
+		}
+	});
 }
 
 function getPolygonCoordinates(){
     let features = source.getFeatures() ;
-    let i = features.length ;
+    let i = features.length - 1 ;
     let tCoord = features[i].getGeometry().getCoordinates() ;
-    console.log(tCoord) ;
+    console.log(tCoord);
+	tCoord = tCoord[0];
+    return tCoord ;
+}
+
+function getPolygonCoordinatesByFeatureId( featureId )
+{
+    let feature = source.getFeatureById( featureId )
+    let tCoord = feature.getGeometry().getCoordinates() ;
+	tCoord = tCoord[0];
     return tCoord ;
 }

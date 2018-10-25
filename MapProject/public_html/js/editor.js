@@ -154,8 +154,9 @@ $( function()
         }
     }); */
     
-    $("#shapeAdd").on( "click", addNewShape ) ;
-    $("#submit").on("click", submitData) ;
-    $("#cancel").on("click", cancelData) ;
-    $("#shapeList").on("change", displayData) ;
+    $("#shapeAdd").on( "click", addNewShape );
+	$("#shapeDelete").on( "click", deleteSelectedShape );
+    $("#submit").on("click", submitData);
+    $("#cancel").on("click", cancelData);
+    $("#shapeList").on("change", displayData );
 });

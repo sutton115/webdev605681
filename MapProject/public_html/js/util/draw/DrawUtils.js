@@ -1,5 +1,5 @@
 /*
-	File Name:		ObjectUtils.js
+	File Name:		DrawUtils.js
 	Purpose:		Utility functions for drawing and
 					handling shapes within the map
 	

@@ -1,5 +1,5 @@
 .map {
-    height: 400px;
+    height: 550px;
     width: 100%;
 }
 
@@ -15,7 +15,7 @@ input:read-only, select:disabled
 
 #shapeList
 {
-	height : 250px;
+	height : 160px;
 	width : 300px;
 }
 

@@ -171,6 +171,12 @@ function getSelectedLayerId()
 	return 0;
 }
 
+function getSelectedShapeId()
+{
+	var selectedOption = $("#shapeList option:selected");
+	return selectedOption.val();	
+}
+
 /*
  * returns the layer ( if it exists ) associated with the
  * provided layer id
@@ -182,6 +188,16 @@ function getLayerById( imageMap, layerId )
 	return mapLayers.find( ( mapLayer ) => 
 	{ 
 		return ( mapLayer.id == layerId ) 
+	} );
+}
+
+function getShapeById( mapLayer, shapeId )
+{
+	var shapes = mapLayer.shapes;
+	
+	return shapes.find( ( shape ) => 
+	{ 
+		return ( shape.id == shapeId ) 
 	} );
 }
 
@@ -204,8 +220,48 @@ function addNewShape()
 	//Set shape editable
 	setShapeEditable( true );
         
-        // Start Interaction (new polygon)
-        addInteraction() ;
+    // Start Interaction (new polygon)
+    addInteraction();
+}
+
+function deleteSelectedShape()
+{
+	var shapeId = getSelectedShapeId();
+	let deleted = deleteShape( shapeId );
+	
+	if( deleted == true )
+		$("#shapeList option[value='" + shapeId + "']").remove();	
+}
+
+function deleteShape( id )
+{
+	//This assumes that the shape currently
+	//displayed within the editor will always
+	//be the selected shape
+	clearShapeEditor();
+	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+	var idToDelete = id;
+		
+	let deleted = false;
+	var shapes = currentLayer.shapes;
+	
+	//delete the shape id from the list
+	for( var i = 0; i < shapes.length; i++ )
+	{
+		let shape = shapes[i];
+		
+		if( shape.id == idToDelete )
+		{
+			shapes.splice( i, 1 );
+			deleted = true;
+		}
+	}
+
+	//delete the feature associated with the shape
+	var feature = source.getFeatureById( id );
+	source.removeFeature( feature );
+	
+	return deleted;
 }
 
 function clearShapeEditor()
@@ -213,18 +269,20 @@ function clearShapeEditor()
 	// Clear entries
 	$("#shapeTitle").val("");
 	$("#shapeLink").val("");
+	clearShapePointList();
+	$("#pointX").val("");
+	$("#pointY").val("");
 
-	
+}
+
+function clearShapePointList()
+{
 	var points = document.getElementById("pointList");
 	var length = points.options.length;
 	for (i = 0; i < length; i++) 
 	{
-		points.options[i] = null;
+		$("#pointList option[value='" + ( i + 1 ) + "']").remove();
 	}
-		
-	$("#pointX").val("");
-	$("#pointY").val("");
-
 }
 
 function setShapeEditable( bool )
@@ -244,6 +302,59 @@ function submitData()
 	$("#shapeDelete").attr('disabled',false);
 	$("#submit").attr('disabled',true);
 	$("#cancel").attr('disabled',true);
+	
+	var mapShape = createShape();
+	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+	let added = replaceOrAddShape( currentLayer, mapShape )
+	
+	if( added == true )
+	{
+		$('#shapeList').append($("<option></option>")
+						   .attr("value", mapShape.id )
+						   .text( mapShape.title ) ); 
+	}
+}
+
+/*
+ * Attempts to replace the specified shape within the specified
+ * layer.  If the shape cannot be found, it will be added to the
+ * layer.  Returns FALSE if the shape existed and was replaced.
+ * Returns TRUE if the shape did not exist and was added
+ */
+function replaceOrAddShape( currentLayer, mapShape )
+{
+	let added = true;
+	var shapes = currentLayer.shapes;
+	
+	for( var i = 0; i < shapes.length; i++ )
+	{
+		let shape = shapes[i];
+		
+		if( shape.id == mapShape.id )
+		{
+			shapes[i] = mapShape;
+			added = false;
+		}
+	}
+	
+	if( added == true )
+		shapes.push( mapShape );
+	
+	return added;	
+}
+
+function createShape()
+{
+	var shape = new MapShape();
+	
+	let features = source.getFeatures();
+    let i = features.length - 1 ;
+	shape.id = features[i].getId();
+	shape.points = getPolygonCoordinates();
+	shape.title = $("#shapeTitle").prop('value');
+	shape.url = $("#shapeLink").prop('value');	
+	
+	return shape;
 }
 
 /*
@@ -263,23 +374,80 @@ function cancelData()
 	setShapeEditable( false );
 }
 
+function updateOnPointChange()
+{
+	//Update the values of the
+	//xpos and ypos editors when the
+	//comboBox value changes
+	var selectedOption = $("#pointList option:selected");
+	var value = selectedOption.val();
+	var index = value - 1;
+	var mapLayer = getLayerById( imageMap, getSelectedLayerId() );
+	var shape = getShapeById( mapLayer, getSelectedShapeId() );
+	var points = getPolygonCoordinatesByFeatureId( shape.id );
+	var point = points[index];
+	
+	setField( "pointX", point[0] );
+	setField( "pointY", point[1] );
+}
+
 /*
 * Display the selected polygon and its title and link
 */
 function displayData()
 {
+	var selectedLayer = getLayerById( imageMap, getSelectedLayerId() );
+	var shapes = selectedLayer.shapes;
+	var selectedShapeId = getSelectedShapeId();
+	var shapeToLoad;
+	
+	for( var i = 0; i < shapes.length; i++ )
+	{
+		let shape = shapes[i];
+		
+		if( shape.id == selectedShapeId )
+		{
+			shapeToLoad = shape;
+		}
+	}	
+	
+	if( shapeToLoad != undefined )
+	{
+		setField( "shapeTitle", shapeToLoad.title );
+		setField( "shapeLink", shapeToLoad.url );
+		clearShapePointList();
+		populateShapePointList( shapeToLoad.points );
+		updateOnPointChange();
+	}
+	
+	
+	/*
 	var val=$(this).val();
 	var polygonObject=store(val);
 	console.log(polygonObject.coords);
 	source.clear();
 	source.addFeature(new ol.Feature({
 		geometry: new ol.geom.Polygon(polygonObject.coords),
-		name: polygonObject.id;
+		name: polygonObject.id
 	}
 		));
 	$("#shapeTitle").val(polygonObject.title).attr("readonly",false);
 	$("#shapeLink").val(polygonObject.url).attr("readonly",false);
 	polygonObject.active=true;
 	console.log(polygonObject);
+	*/
 }
 
+function populateShapePointList( points )
+{
+	var pointList = document.getElementById( "pointList" );
+	
+	for( var i = 0; i < points.length; i++ )
+	{
+		var newOption = document.createElement( "option" );
+		newOption.value = i + 1;
+		newOption.text = "Point " + ( i + 1 );
+		pointList.add( newOption, i );
+	}
+    $('#pointList').val('1');	
+}
