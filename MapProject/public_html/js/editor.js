@@ -58,8 +58,8 @@ $( function()
                     })
                 }) ;
                 
+                source = new ol.source.Vector({wrapX: false});
                 
-    
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
                         color: 'rgba(255, 255, 255, 0.6)'

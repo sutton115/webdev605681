@@ -91,15 +91,7 @@ function addInteraction() {
 
     draw.on('drawend', function(){
         map.removeInteraction(draw);
-        draw.setActive(false) ;
-        
-        let features = source.getFeatures() ;
-        //console.log(source.getState()) ;
-        console.log(features) ;
-        //let i = features.length ;
-        //let tCoord = features[i].getGeometry().getCoordinates() ;
-        //console.log(tCoord) ;
-        
+        //draw.setActive(false) ;
     }) ;
 }
 
