@@ -6,55 +6,6 @@
 				 interact with the editor
 */
 
-//initializes the document by clearing the editor, hiding the
-//editor, and hiding the message box to present the user with
-//a fresh start
-function initDocument()
-{
-	clearForm();
-}
-
-/*
- Clears all fields within the editor
-*/
-function clearForm()
-{
-	//Will need to add new form fields to this method	
-
-	setFormFieldsEnabled( true );	
-}
-
-/*
- Sets all editor fields to enabled ( true ) or 
- disabled ( false )
-*/
-function setFormFieldsEnabled( bool )
-{
-	//Add setEnabled calls for form fields here
-	$("#shapeTitle").attr('readonly',!bool);
-	$("#shapeLink").attr('readonly',!bool);
-	$("#pointList").attr('readonly',!bool);
-	$("#pointX").attr('readonly',!bool);
-	$("#pointY").attr('readonly',!bool);
-	$("#submit").attr('disabled',bool);
-	$("#cancel").attr('disabled',bool);
-	
-	if( bool == true )
-	  configureReadOnly();
-}
-
-/*
- Editor fields that should never be modified
- ( e.g. Id fields ) should be added to this
- method so that they
- are always set to read-only
-*/
-function configureReadOnly()
-{
-  $("#pointX").attr('readonly', true);
-  $("#pointY").attr('readonly', true);
-}
-
 /*
  Clears the text field within the editor with 
  specified id
@@ -177,29 +128,6 @@ function populateImageMap( imageMap )
 	}
 }
 
-/*
- * Populates the provided array with layer
- * objects derived from the current values
- * of the image map's form fields
- */
-function populateMapLayers( layers )
-{
-	//TODO: iterate for each layer, read in applicable fields
-    // and push each layer onto the provided array 
-	
-}
-
-/*
- * Creates a shape object with the values of the
- * editor field(s) associated with the provided
- * layer id and shape id value
- */
-function createShapeFromEditor( layerId, shapeEditorId )
-{
-	
-	
-}
-
 
 /*
  * Sets the value of the specified element to
@@ -300,31 +228,6 @@ function setShapeEditable( bool )
 {
 	$("#shapeTitle").attr('readonly', !bool );
 	$("#shapeLink").attr('readonly', !bool );
-}
- 
-function createTextEditor( label, id, name, defaultValue )
-{
-	if( label == undefined )
-		label = "Label"
-	if( id == undefined )
-		id == ""
-	if( name == undefined )
-		name == ""
-	if( defaultValue == undefined )
-		defaultValue == ""
-		
-	
-	let txtEditor = label + ": <input type = \"text\" id = " + id + " value = " + defaultValue + " name = " + name + " />"
-	return txtEditor;
-}
- 
-/*
-* Adds a new layer editor to the image map
-* editor
-*/
-function addnewLayerEditor()
-{
-  
 }
 
 /*

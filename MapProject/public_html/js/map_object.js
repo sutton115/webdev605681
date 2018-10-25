@@ -18,7 +18,8 @@ function shapePoint(){
 		this.x = x ;
 		this.y = y ;
 	}
-	function getPoints(){
+	function getPoints()
+	{
 		return [this.x, this.y] ;
 	}
 }
@@ -35,10 +36,12 @@ function mapShape(){
 	this.url = '' ;
 	this.target = '_blank';
 	
-	function addPoint(tuple){
+	function addPoint(tuple)
+	{
 		this.points.push(tuple) ;
 	}
-	function getPoints(){
+	function getPoints()
+	{
 		return this.points ;
 	}
 }
@@ -53,7 +56,8 @@ function mapLayer(){
 	this.url = '' ;
 	this.shapes = [] ;
 
-	function addShape(obj){
+	function addShape(obj)
+	{
 		this.shapes.push(obj) ;
 	}
 	
@@ -68,7 +72,8 @@ function mapObject(){
 	this.title = '' ;
 	this.layers = [] ;
 	
-	function addLayer(obj){
+	function addLayer(obj)
+	{
 		this.layers.push(obj) ;
 	}	
 }

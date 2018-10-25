@@ -37,7 +37,7 @@ $( function()
     let preW = 800;
     let preH = 400;
 
-//The image URL part
+	//The image URL part
     urlInput.on('change',function () {
         const url = $(this).val();
         if ((url.startsWith("http://") || url.startsWith("https://"))&&
