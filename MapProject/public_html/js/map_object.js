@@ -6,6 +6,9 @@
 	Modification History:
 */
 
+// Global variables so we can access them later
+var map, draw, source ;
+
 /*
  * Constructs a default shapePoint object
  *
@@ -78,3 +81,29 @@ function mapObject(){
 	}	
 }
 
+
+
+function addInteraction() {
+    if(draw)
+        map.removeInteraction(draw);
+    
+    draw = new ol.interaction.Draw({
+        source: source,
+        type: 'Polygon'
+    });
+    map.addInteraction(draw);
+    draw.setActive(true) ;
+
+    draw.on('drawend', function(){
+        map.removeInteraction(draw);
+        //draw.setActive(false) ;
+    }) ;
+}
+
+function getPolygonCoordinates(){
+    let features = source.getFeatures() ;
+    let i = features.length ;
+    let tCoord = features[i].getGeometry().getCoordinates() ;
+    console.log(tCoord) ;
+    return tCoord ;
+}
