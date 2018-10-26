@@ -154,7 +154,7 @@ $( function()
         }
     }); */
     
-    $("#shapeAdd").on( "click", addNewShape )
-	$("#submit").on("click", submitData);
-	$("#cancel").on("click", cancelData);
+    $("#shapeAdd").on( "click", addNewShape ) ;
+    $("#submit").on("click", submitData) ;
+    $("#cancel").on("click", cancelData) ;
 });

@@ -203,6 +203,9 @@ function addNewShape()
 	
 	//Set shape editable
 	setShapeEditable( true );
+        
+        // Start Interaction (new polygon)
+        addInteraction() ;
 }
 
 function clearShapeEditor()
