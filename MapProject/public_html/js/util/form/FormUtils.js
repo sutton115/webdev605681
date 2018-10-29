@@ -262,3 +262,24 @@ function cancelData()
 	
 	setShapeEditable( false );
 }
+
+/*
+* Display the selected polygon and its title and link
+*/
+function displayData()
+{
+	var val=$(this).val();
+	var polygonObject=store(val);
+	console.log(polygonObject.coords);
+	source.clear();
+	source.addFeature(new ol.Feature({
+		geometry: new ol.geom.Polygon(polygonObject.coords),
+		name: polygonObject.id;
+	}
+		));
+	$("#shapeTitle").val(polygonObject.title).attr("readonly",false);
+	$("#shapeLink").val(polygonObject.url).attr("readonly",false);
+	polygonObject.active=true;
+	console.log(polygonObject);
+}
+

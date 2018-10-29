@@ -157,4 +157,5 @@ $( function()
     $("#shapeAdd").on( "click", addNewShape ) ;
     $("#submit").on("click", submitData) ;
     $("#cancel").on("click", cancelData) ;
+    $("shapeList").on("change", displayData) ;
 });

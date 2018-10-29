@@ -38,6 +38,7 @@ function mapShape(){
 	this.title = '' ;
 	this.url = '' ;
 	this.target = '_blank';
+	this.active=false;
 	
 	function addPoint(tuple)
 	{
