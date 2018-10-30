@@ -331,6 +331,23 @@ function submitData()
 }
 
 /*
+ * Saves the current image map to a file
+ */
+ function saveToFile()
+ {
+	 var fileName = $("#fileName").prop('value');
+	 console.log( fileName );
+	 var body = JSON.stringify( imageMap );
+	 
+	 var downloadElement = document.createElement( "a" );
+	 downloadElement.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent( body ) );
+     downloadElement.setAttribute( 'download', fileName );
+	 document.body.appendChild( downloadElement );
+	 downloadElement.click();
+	 document.body.removeChild( downloadElement );	 
+ }
+
+/*
  * Attempts to replace the specified shape within the specified
  * layer.  If the shape cannot be found, it will be added to the
  * layer.  Returns FALSE if the shape existed and was replaced.
@@ -507,3 +524,4 @@ function populateShapePointList( points )
 	}
     $('#pointList').val('1');	
 }
+

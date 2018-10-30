@@ -25,6 +25,12 @@ input:read-only, select:disabled
 	margin : 20px 0px 0px 20px;
 }
 
+#importExport
+{
+	float : right;
+	margin : 0px 42% 0px 0px;
+}
+
 #confirmData
 {
 	display : inline;

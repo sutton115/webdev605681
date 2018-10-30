@@ -159,4 +159,5 @@ $( function()
     $("#submit").on("click", submitData);
     $("#cancel").on("click", cancelData);
     $("#shapeList").on("click change", displayData );
+	$("#saveToFile").on("click", saveToFile );
 });
