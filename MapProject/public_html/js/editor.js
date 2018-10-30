@@ -47,6 +47,8 @@ $( function()
             $("#Continue").css("background","#00B0F0");
             var imgObj = new Image();
             imgObj.src = url;
+			var mapLayer = getLayerById( imageMap, getSelectedLayerId() );
+			mapLayer.url = url;
             //After the image is loaded, display it on the canvas.
             imgObj.onload = function(data){
                 //console.log(data);
