@@ -154,7 +154,7 @@ function setSelected( elementId, selectedValue )
 	
 	for(var i=0; i < elmnt.options.length; i++)
 	{
-		console.log( elmnt.options[i].value );
+		//console.log( elmnt.options[i].value );
 		if(elmnt.options[i].value === selectedValue ) 
 		{
 			elmnt.selectedIndex = i;
@@ -210,6 +210,9 @@ function addNewShape()
 {
 	//First clear editor fields
 	clearShapeEditor();
+        
+        //Unselect option if applicable
+        $("#shapeList option:selected").prop("selected", false);
 	
 	//Set button enabled state(s)
 	$("#shapeAdd").attr('disabled',true);
@@ -300,19 +303,31 @@ function submitData()
 	// Control actions
 	$("#shapeAdd").attr('disabled',false);
 	$("#shapeDelete").attr('disabled',false);
-	$("#submit").attr('disabled',true);
+	//$("#submit").attr('disabled',true); // leave active for updates
 	$("#cancel").attr('disabled',true);
 	
-	var mapShape = createShape();
+        var mapShape = getSelectedShape() ;
+        if(mapShape == undefined){
+            // Creating a new shape
+            mapShape = createShape();
+        }else{
+            // Updating existing shape
+            updateShape(mapShape);
+        }
+        
 	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
 	let added = replaceOrAddShape( currentLayer, mapShape )
 	
 	if( added == true )
 	{
-		$('#shapeList').append($("<option></option>")
-						   .attr("value", mapShape.id )
-						   .text( mapShape.title ) ); 
-	}
+            let newOption = $("<option></option>")
+                                .attr("value", mapShape.id )
+                                .text( mapShape.title ) ;
+            $('#shapeList').append(newOption); 
+            newOption.prop('selected', true) ;
+	}else{
+            $("#shapeList option:selected").text(mapShape.title) ;
+        }
 }
 
 /*
@@ -357,6 +372,13 @@ function createShape()
 	return shape;
 }
 
+function updateShape(shape)
+{
+    shape.points = getPolygonCoordinates();
+    shape.title = $("#shapeTitle").prop('value');
+    shape.url = $("#shapeLink").prop('value');	
+}
+
 /*
 * Clears data without updates
 */
@@ -364,6 +386,9 @@ function cancelData()
 {
 	//First clear editor fields
 	clearShapeEditor();
+        
+        //End interaction (if any)
+        if(draw) map.removeInteraction(draw);
 	
 	//Set button enabled state(s)
 	$("#shapeAdd").attr('disabled', false);
@@ -389,6 +414,31 @@ function updateOnPointChange()
 	
 	setField( "pointX", point[0] );
 	setField( "pointY", point[1] );
+}
+
+/*
+ * Fetch Currently Selected Shape (if any)
+ */
+
+function getSelectedShape()
+{
+    var selectedLayer = getLayerById( imageMap, getSelectedLayerId() );
+    var shapes = selectedLayer.shapes;
+    var selectedShapeId = getSelectedShapeId();
+    if(selectedShapeId == undefined) return ;
+    var shapeToLoad;
+
+    for( var i = 0; i < shapes.length; i++ )
+    {
+            let shape = shapes[i];
+
+            if( shape.id == selectedShapeId )
+            {
+                    shapeToLoad = shape;
+            }
+    }
+
+    return shapeToLoad ;
 }
 
 /*

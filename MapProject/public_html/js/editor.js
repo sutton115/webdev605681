@@ -31,7 +31,7 @@ $( function()
     });
 
     function callback(data){
-        console.log(data);
+        //console.log(data);
         return data;
     }
     let preW = 800;
@@ -158,5 +158,5 @@ $( function()
 	$("#shapeDelete").on( "click", deleteSelectedShape );
     $("#submit").on("click", submitData);
     $("#cancel").on("click", cancelData);
-    $("#shapeList").on("change", displayData );
+    $("#shapeList").on("click change", displayData );
 });

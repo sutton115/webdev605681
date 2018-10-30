@@ -122,7 +122,7 @@ function getPolygonCoordinates(){
     let features = source.getFeatures() ;
     let i = features.length - 1 ;
     let tCoord = features[i].getGeometry().getCoordinates() ;
-    console.log(tCoord);
+    //console.log(tCoord);
 	tCoord = tCoord[0];
     return tCoord ;
 }
