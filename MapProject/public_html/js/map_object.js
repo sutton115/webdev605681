@@ -114,6 +114,7 @@ function addInteraction() {
 			//once
 			clearShapePointList();
 			populateShapePointList( points );
+			updateOnPointChange();
 		}
 	});
 }

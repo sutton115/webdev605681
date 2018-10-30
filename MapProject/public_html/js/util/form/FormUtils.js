@@ -409,7 +409,13 @@ function updateOnPointChange()
 	var index = value - 1;
 	var mapLayer = getLayerById( imageMap, getSelectedLayerId() );
 	var shape = getShapeById( mapLayer, getSelectedShapeId() );
-	var points = getPolygonCoordinatesByFeatureId( shape.id );
+	var points;
+	
+	if( shape != undefined )
+		points = getPolygonCoordinatesByFeatureId( shape.id );
+	else
+		points = getPolygonCoordinates();
+	
 	var point = points[index];
 	
 	setField( "pointX", point[0] );
