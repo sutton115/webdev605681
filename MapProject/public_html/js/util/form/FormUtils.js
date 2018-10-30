@@ -404,8 +404,24 @@ function cancelData()
 	//First clear editor fields
 	clearShapeEditor();
         
-        //End interaction (if any)
-        if(draw) map.removeInteraction(draw);
+	//End interaction (if any)
+	if(draw) 
+		map.removeInteraction(draw);
+
+	//Check for a new unsaved shape.  If one exists, delete the feature
+	//As the user has opted not to save/submit it
+	let features = source.getFeatures();
+	let i = features.length - 1 ;
+	let feature = features[i];
+	var featureId = feature.getId();
+	
+	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+	var shape = getShapeById( currentLayer, featureId );
+	
+	if( shape == undefined )
+	{
+		deleteShape( featureId );		
+	}
 	
 	//Set button enabled state(s)
 	$("#shapeAdd").attr('disabled', false);
@@ -469,6 +485,7 @@ function getSelectedShape()
 */
 function displayData()
 {
+	cancelData();
 	var selectedLayer = getLayerById( imageMap, getSelectedLayerId() );
 	var shapes = selectedLayer.shapes;
 	var selectedShapeId = getSelectedShapeId();
