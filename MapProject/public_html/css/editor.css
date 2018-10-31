@@ -1,28 +1,34 @@
 .map {
-    height: 550px;
+    height: 60%;
     width: 100%;
+	margin-top : 10px;
 }
 
 input:read-only, select:disabled
 {
-	background-color: lightgray
+	background-color: lightgray;
+}
+
+h1
+{
+	text-align : center;
 }
 
 #shapeListPanel
 {
-	margin : 20px 20px 20px 20px;
+	margin : 10px 10px 10px 10px;
 }
 
 #shapeList
 {
-	height : 160px;
+	height : 120px;
 	width : 300px;
 }
 
 #CRUDButtonList
 {
 	display : inline;
-	margin : 20px 0px 0px 20px;
+	margin : 10px 0px 0px 10px;
 }
 
 #importExport
@@ -34,18 +40,18 @@ input:read-only, select:disabled
 #confirmData
 {
 	display : inline;
-	margin : 50px 0px 0px 20px;
+	margin : 50px 0px 0px 10px;
 }
 
 .buttonClass
 {
-	margin : 0px 20px 0px 0px
+	margin : 0px 10px 0px 0px
 }
 
 .shapeEditorComponents
 {
 	display : inline;
-	margin : 20px 0px 0px 20px;
+	margin : 10px 0px 0px 10px;
 }
 
 .comboBox
