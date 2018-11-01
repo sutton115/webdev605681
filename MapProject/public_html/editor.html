@@ -37,6 +37,7 @@
 			var imageMap = new MapObject();
 			var mapLayer = new MapLayer();
 			imageMap.addLayer( mapLayer );
+			var currentLayer = 0;
 		</script>
 
         
@@ -114,6 +115,7 @@
 					<div id="importExport">
 						<input type = "text" id = "fileName" class="buttonClass" value = "ImageMap.json" />
 						<input type = "button" id = "saveToFile" class="buttonClass" value = "Save To File" />
+						<input type="file" id="loadImageMap" />
 					</div>
             </div>
 			<p>			

@@ -191,6 +191,10 @@ function getLayerById( imageMap, layerId )
 	} );
 }
 
+/*
+ * Returns the shape associated with the specified
+ * id and layer if it exists
+ */
 function getShapeById( mapLayer, shapeId )
 {
 	var shapes = mapLayer.shapes;
@@ -227,16 +231,26 @@ function addNewShape()
     addInteraction();
 }
 
+/*
+ * Deletes the currently selected shape.  By default,
+ * this function will remove the shape from the underlying
+ * data structure as well
+ */
 function deleteSelectedShape()
 {
 	var shapeId = getSelectedShapeId();
-	let deleted = deleteShape( shapeId );
-	
-	if( deleted == true )
-		$("#shapeList option[value='" + shapeId + "']").remove();	
+	let deleted = deleteShape( shapeId, true );	
 }
 
-function deleteShape( id )
+/*
+ * "Deletes" a shape from the editor.  If removeFromStructure
+ * is set to TRUE, the shape will also be removed from the 
+ * underlying image map data structure.  If removeFromStructure
+ * is set to FALSE, the shape will merely be removed from the
+ * shape list and the associated feature/geometry on the map will
+ * be removed.
+ */
+function deleteShape( id, removeFromStructure )
 {
 	//This assumes that the shape currently
 	//displayed within the editor will always
@@ -249,24 +263,41 @@ function deleteShape( id )
 	var shapes = currentLayer.shapes;
 	
 	//delete the shape id from the list
-	for( var i = 0; i < shapes.length; i++ )
+	
+	if( removeFromStructure )  //Only delete the shape from the underlying data struture if this is true
 	{
-		let shape = shapes[i];
-		
-		if( shape.id == idToDelete )
+		for( var i = 0; i < shapes.length; i++ )
 		{
-			shapes.splice( i, 1 );
-			deleted = true;
+			let shape = shapes[i];
+			
+			if( shape.id == idToDelete )
+			{
+				//console.log( "Deleting shape with id = " + idToDelete + " from image map object" );
+				shapes.splice( i, 1 );
+				deleted = true;
+			}
+			else
+			{
+				//console.log( "No shape found with id = " + idToDelete );
+			}
 		}
 	}
+	
+	$("#shapeList option[value='" + idToDelete + "']").remove();
 
 	//delete the feature associated with the shape
 	var feature = source.getFeatureById( id );
-	source.removeFeature( feature );
+	
+	if( feature != undefined )
+		source.removeFeature( feature );
 	
 	return deleted;
 }
 
+/*
+ * Clears all shape editor values and also
+ * clears the point list for the current shape
+ */
 function clearShapeEditor()
 {
 	// Clear entries
@@ -278,6 +309,9 @@ function clearShapeEditor()
 
 }
 
+/*
+ * Clears the list of points within the point list
+ */
 function clearShapePointList()
 {
 	var points = document.getElementById("pointList");
@@ -288,6 +322,9 @@ function clearShapePointList()
 	}
 }
 
+/*
+ * Sets a shape's editor values so that they can be modified
+ */
 function setShapeEditable( bool )
 {
 	$("#shapeTitle").attr('readonly', !bool );
@@ -320,14 +357,26 @@ function submitData()
 	
 	if( added == true )
 	{
-            let newOption = $("<option></option>")
-                                .attr("value", mapShape.id )
-                                .text( mapShape.title ) ;
-            $('#shapeList').append(newOption); 
-            newOption.prop('selected', true) ;
-	}else{
-            $("#shapeList option:selected").text(mapShape.title) ;
-        }
+		addShapeToShapeList( mapShape.id, mapShape.title );
+	}
+	else
+	{
+		$("#shapeList").val( mapShape.id );
+    }
+}
+
+/*
+ * Adds and entry to the shape list with the specified
+ * id and title values
+ */
+function addShapeToShapeList( id, title )
+{
+	//console.log( "Adding Shape with Id = " + id + "and title = " + title + "to shape list" );
+	let newOption = $("<option></option>")
+							.attr("value", id )
+							.text( title ) ;
+		$('#shapeList').append(newOption); 
+		newOption.prop('selected', true) ;
 }
 
 /*
@@ -336,10 +385,9 @@ function submitData()
  function saveToFile()
  {
 	 var fileName = $("#fileName").prop('value');
-	 console.log( fileName );
-	 var body = JSON.stringify( imageMap );
-	 
+	 var body = JSON.stringify( imageMap );	 
 	 var downloadElement = document.createElement( "a" );
+	 
 	 downloadElement.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent( body ) );
      downloadElement.setAttribute( 'download', fileName );
 	 document.body.appendChild( downloadElement );
@@ -375,6 +423,11 @@ function replaceOrAddShape( currentLayer, mapShape )
 	return added;	
 }
 
+/*
+ * Creates a shape object from the values
+ * currently in the shape editor along with the
+ * list of points retrieved from the newest shape
+ */
 function createShape()
 {
 	var shape = new MapShape();
@@ -388,6 +441,7 @@ function createShape()
 	
 	return shape;
 }
+
 
 function updateShape(shape)
 {
@@ -408,19 +462,27 @@ function cancelData()
 	if(draw) 
 		map.removeInteraction(draw);
 
-	//Check for a new unsaved shape.  If one exists, delete the feature
-	//As the user has opted not to save/submit it
-	let features = source.getFeatures();
-	let i = features.length - 1 ;
-	let feature = features[i];
-	var featureId = feature.getId();
-	
-	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-	var shape = getShapeById( currentLayer, featureId );
-	
-	if( shape == undefined )
+	//If the source is undefined, then we're likely
+	//in a freshly initialized state so nothing has 
+	//been drawn yet.  If it's not, we need to be sure
+	//to remove any unsaved drawing
+	if( source != undefined )
 	{
-		deleteShape( featureId );		
+		//Check for a new unsaved shape.  If one exists, delete the feature
+		//As the user has opted not to save/submit it
+		let features = source.getFeatures();
+		let i = features.length - 1 ;
+		let feature = features[i];
+		var featureId = feature.getId();
+		
+		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+		var shape = getShapeById( currentLayer, featureId );
+		
+		if( shape == undefined )
+		{
+			//console.log( "Deleting shape " + featureId );
+			deleteShape( featureId, false );		
+		}
 	}
 	
 	//Set button enabled state(s)
@@ -432,6 +494,10 @@ function cancelData()
 	setShapeEditable( false );
 }
 
+/*
+ * Updates the pointX and pointY editor values
+ * upon selection of a new point
+ */
 function updateOnPointChange()
 {
 	//Update the values of the
@@ -458,7 +524,6 @@ function updateOnPointChange()
 /*
  * Fetch Currently Selected Shape (if any)
  */
-
 function getSelectedShape()
 {
     var selectedLayer = getLayerById( imageMap, getSelectedLayerId() );
@@ -507,27 +572,13 @@ function displayData()
 		setField( "shapeLink", shapeToLoad.url );
 		clearShapePointList();
 		populateShapePointList( shapeToLoad.points );
-		updateOnPointChange();
 	}
-	
-	
-	/*
-	var val=$(this).val();
-	var polygonObject=store(val);
-	console.log(polygonObject.coords);
-	source.clear();
-	source.addFeature(new ol.Feature({
-		geometry: new ol.geom.Polygon(polygonObject.coords),
-		name: polygonObject.id
-	}
-		));
-	$("#shapeTitle").val(polygonObject.title).attr("readonly",false);
-	$("#shapeLink").val(polygonObject.url).attr("readonly",false);
-	polygonObject.active=true;
-	console.log(polygonObject);
-	*/
 }
 
+/*
+ * Populates the shape point list with the points
+ * specified
+ */
 function populateShapePointList( points )
 {
 	var pointList = document.getElementById( "pointList" );
@@ -540,5 +591,92 @@ function populateShapePointList( points )
 		pointList.add( newOption, i );
 	}
     $('#pointList').val('1');	
+	updateOnPointChange();
 }
 
+/*
+ * Loads a local image map file into the
+ * editor.  
+ */
+function loadImageMap( evt )
+{
+	//First we need to cancel any current unsaved
+	//Input or actions
+	cancelData();
+	clearEditor();
+	
+	//TODO: Handle multiple imageMaps
+	var imageMapFiles = evt.target.files;
+	var imageMapFile = imageMapFiles[0];
+	var fr = new FileReader();
+	
+	fr.onload = function( e )
+	{
+		var body = fr.result;
+		var obj = getObjectFromJSON( body );
+		//console.log( body );
+		//console.log ( obj );
+	
+		if( obj != undefined && obj.instanceType != undefined && obj.instanceType == "MapObject" )
+		{
+			console.log( "Image Map loaded successfully" );
+			imageMap = obj;
+			
+			//Load the editor with the first layer
+			//by default
+			loadImageMapLayer( 0 );
+		}	
+	}
+	fr.readAsText( imageMapFile );
+}
+
+/*
+ * loads the specified map layer into the editor
+ */
+function loadImageMapLayer( layerId )
+{
+	currentLayer = layerId;
+	var mapLayer = imageMap.layers[layerId];
+	$("#url").val( mapLayer.url ).trigger('change');
+}
+
+/*
+ * Loads the specified list of shapes into the
+ * editor's shape list and draws them on the map
+ * layer
+ */
+function loadShapes( shapes )
+{
+	var shape;
+	var points;
+	
+	for( var i = 0; i < shapes.length; i++ )
+	{
+		shape = shapes[i];
+		points = shape.points;
+		drawShape( points, shape.id );
+		addShapeToShapeList( shape.id, shape.title );
+	}
+	
+	shape = shapes[0];
+	//select the first shape in the list after loading
+	$("#shapeList").val( shape.id );
+}
+
+/*
+ * Clears the editor of all elements including
+ * shapes, shape points, title, link, etc, but does
+ * NOT remove the elements from the underlying data
+ * structure
+ */
+function clearEditor()
+{
+	//TODO:  Handle other layers
+	
+	$("#shapeList > option").each( function ()
+	{
+		//console.log( "Deleting shape with id = " + this.value );
+		deleteShape( this.value, false );
+	});
+	clearShapeEditor();
+}

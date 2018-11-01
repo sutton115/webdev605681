@@ -13,6 +13,8 @@
 function getObjectFromJSON( stringifiedObject )
 {
 	parsedObject = JSON.parse( stringifiedObject );
+	//console.log( "Parsed Object: " );
+	//console.log( parsedObject );
 	dataType = parsedObject.instanceType;
 	return new window[dataType]( parsedObject);
 }	

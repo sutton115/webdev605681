@@ -13,9 +13,18 @@ var map, draw, source ;
  * Constructs a default shapePoint object
  *
  */ 
-function ShapePoint(){
+function ShapePoint( options )
+{
+	this.instanceType = "ShapePoint";
 	this.x = 0 ;
 	this.y = 0 ;
+	
+	for( let prop in options )
+	{
+		if( this[prop] != options[prop] )
+			this[prop] = options[prop];
+			
+	}
 	
 	function setPoints(x, y){
 		this.x = x ;
@@ -31,7 +40,9 @@ function ShapePoint(){
  * Constructs a default mapShape object
  *
  */ 
-function MapShape(){
+function MapShape( options )
+{
+	this.instanceType = "MapShape";
 	this.type = 'polygon' ;
 	this.id = 0;
 	this.points = [] ;
@@ -39,6 +50,13 @@ function MapShape(){
 	this.url = '' ;
 	this.target = '_blank';
 	this.active=false;
+	
+	for( let prop in options )
+	{
+		if( this[prop] != options[prop] )
+			this[prop] = options[prop];
+			
+	}
 	
 	function addPoint(tuple)
 	{
@@ -54,12 +72,21 @@ function MapShape(){
  * Constructs a default mapLayer object
  *
  */ 
-function MapLayer(){
+function MapLayer( options )
+{
+	this.instanceType = "MapLayer";
 	this.type = 'link';
 	this.id = 0;
 	this.url = '' ;
 	this.shapes = [] ;
 
+	for( let prop in options )
+	{
+		if( this[prop] != options[prop] )
+			this[prop] = options[prop];
+			
+	}
+	
 	function addShape(obj)
 	{
 		this.shapes.push(obj) ;
@@ -71,11 +98,18 @@ function MapLayer(){
  * Constructs a default mapObject object
  *
  */
-function MapObject()
+function MapObject( options )
 {
-	this.objType = 'mapObject' ;
+	this.instanceType = 'MapObject';
 	this.title = '';
 	this.layers = [];
+	
+	for( let prop in options )
+	{
+		if( this[prop] != options[prop] )
+			this[prop] = options[prop];
+			
+	}
 	
 	this.addLayer = function(obj)
 	{
