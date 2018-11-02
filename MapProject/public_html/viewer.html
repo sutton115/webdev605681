@@ -1,10 +1,47 @@
 <html>
- <head>
-  <title>Viewer</title>
-  <script src="js/classmap.js"></script>
-  <link rel="stylesheet" href="css/viewer.css">
- </head>
- <body>
-  <h1>Viewer</h1>
- </body>
+    <head>
+        <title>Viewer</title>
+        
+        <!-- Cascading Style Sheets -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/css/ol.css" type="text/css">
+        <script src="js/classmap.js"></script>
+        <link rel="stylesheet" href="css/viewer.css">
+        
+        <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/build/ol.js"></script>
+
+        <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        
+        <!-- Other custom javascript files for various functionality -->
+        <script src="Library/store2.min.js"></script>
+        <script src = "js/classmap.js"> </script>
+        <script src = "js/viewer.js"> </script>
+        <script type="text/javascript" src="js/util/form/FormUtils.js"></script>
+        <script type="text/javascript" src="js/util/draw/DrawUtils.js"></script>
+        <script type="text/javascript" src="js/util/ObjectUtils.js"></script>
+        <script type="text/javascript" src="js/map_object.js"></script>
+        
+    </head>
+    <body>
+        <h1>Viewer</h1>
+        
+        <!-- DIV to display the user-provided image -->
+        <div id="map" class="map"></div>
+        
+        <!-- Div to load existing data file -->
+        <div class="input-group" style="width: 400px;">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="mapInputFile">
+                <label class="custom-file-label" for="mapInputFile">Choose file</label>
+            </div>
+            <div class="input-group-append">
+                <button id="loadMapFile" class="btn btn-outline-secondary" type="button">Load Map</button>
+            </div>
+      </div>
+    </body>
 </html>
