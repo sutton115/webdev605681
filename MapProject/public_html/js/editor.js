@@ -129,7 +129,7 @@ $( function()
 					//This is important in the event that we're either
 					//loading a new layer or a completely new image map
 					clearEditor();
-					
+					loadLayers();
 					//Load the shapes onto the layer
 					var mapLayer = getLayerById( imageMap, currentLayer );
 					var shapes = mapLayer.shapes;
@@ -173,6 +173,9 @@ $( function()
     
     $("#shapeAdd").on( "click", addNewShape );
 	$("#shapeDelete").on( "click", deleteSelectedShape );
+	$("#layerAdd").on( "click", addNewLayer );
+	$("#layerDelete").on( "click", deleteSelectedLayer );
+	$("#layerList").on( "change", function(){ loadImageMapLayer( $("#layerList").val() ) });
     $("#submit").on("click", submitData);
     $("#cancel").on("click", cancelData);
     $("#shapeList").on("click change", displayData );

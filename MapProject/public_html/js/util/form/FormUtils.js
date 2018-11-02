@@ -168,7 +168,7 @@ function setSelected( elementId, selectedValue )
  */
 function getSelectedLayerId()
 {
-	return 0;
+	return currentLayer;
 }
 
 function getSelectedShapeId()
@@ -203,6 +203,60 @@ function getShapeById( mapLayer, shapeId )
 	{ 
 		return ( shape.id == shapeId ) 
 	} );
+}
+
+function addNewLayer()
+{
+	if( map != undefined )
+		removeMapLayers();
+	
+	clearEditor();	
+	var mapLayers = imageMap.layers;
+	var mapLayer = new MapLayer();
+	mapLayer.id = mapLayers.length;	
+	console.log( "New Map Layer id set to " + mapLayer.id );
+	mapLayers.push( mapLayer );
+	currentLayer = mapLayer.id;
+	refreshLayers();
+}
+
+function deleteSelectedLayer()
+{
+	var layerId = getSelectedLayerId();
+	var nextLayerToLoad = -1;
+	var mapLayers = imageMap.layers;
+	var mapLayer;
+	
+	for( var i =0; i < mapLayers.length; i++ )
+	{
+		mapLayer = mapLayers[i];
+		
+		if( mapLayer.id == layerId )
+		{
+			if( i < ( mapLayers.length - 1 ) )
+				nextLayerToLoad = i;
+			else
+				nextLayerToLoad = i - 1;
+			
+			mapLayers.splice( i, 1 );
+			
+			for( var j = 0; j < mapLayers.length; j++ )
+			{
+				mapLayer = mapLayers[j];
+				mapLayer.id = j;
+			}
+			refreshLayers();
+			break;			
+		}		
+	}
+	
+	if( nextLayerToLoad > -1 )
+		loadImageMapLayer( nextLayerToLoad );
+	else
+	{
+		clearEditor();	
+	}
+	
 }
 
 /*
@@ -257,14 +311,16 @@ function deleteShape( id, removeFromStructure )
 	//be the selected shape
 	clearShapeEditor();
 	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-	var idToDelete = id;
-		
+	var shapes;
+	var idToDelete = id;		
 	let deleted = false;
-	var shapes = currentLayer.shapes;
+	
+	if( currentLayer != undefined )
+		shapes = currentLayer.shapes;
 	
 	//delete the shape id from the list
 	
-	if( removeFromStructure )  //Only delete the shape from the underlying data struture if this is true
+	if( removeFromStructure && shapes != undefined )  //Only delete the shape from the underlying data struture if this is true
 	{
 		for( var i = 0; i < shapes.length; i++ )
 		{
@@ -473,7 +529,10 @@ function cancelData()
 		let features = source.getFeatures();
 		let i = features.length - 1 ;
 		let feature = features[i];
-		var featureId = feature.getId();
+		var featureId;
+		
+		if( feature != undefined )
+			featureId = feature.getId();
 		
 		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
 		var shape = getShapeById( currentLayer, featureId );
@@ -602,7 +661,6 @@ function loadImageMap( evt )
 {
 	//First we need to cancel any current unsaved
 	//Input or actions
-	cancelData();
 	clearEditor();
 	
 	//TODO: Handle multiple imageMaps
@@ -637,7 +695,17 @@ function loadImageMapLayer( layerId )
 {
 	currentLayer = layerId;
 	var mapLayer = imageMap.layers[layerId];
-	$("#url").val( mapLayer.url ).trigger('change');
+	
+	console.log( imageMap );
+	
+	if( mapLayer.url != "" )
+		$("#url").val( mapLayer.url ).trigger('change');
+	else
+	{
+		removeMapLayers();
+		clearEditor();
+		loadLayers();
+	}
 }
 
 /*
@@ -663,6 +731,51 @@ function loadShapes( shapes )
 	$("#shapeList").val( shape.id );
 }
 
+function refreshLayers()
+{
+	clearLayers();
+	loadLayers();
+}
+
+/*
+ * Clears the layers editor of the editor
+ */
+function clearLayers()
+{
+	var mapLayers = document.getElementById("layerList");
+	var length = mapLayers.options.length;
+	for (i = 0; i < length; i++) 
+	{
+		$("#layerList option[value='" + i + "']").remove();
+	}
+}
+
+/*
+ * Loads an image map's layers into the layers
+ * editor
+ */
+function loadLayers()
+{
+	var mapLayers = imageMap.layers;
+	var layerCount = mapLayers.length;
+	
+	for( var i = 0; i < layerCount; i++ )
+	{
+		console.log( "Adding layer with id " + i );
+		addLayerToLayerList( i );
+	}
+    $('#layerList').val( currentLayer );		
+}
+
+function addLayerToLayerList( id )
+{
+	var layerList = document.getElementById( "layerList" );
+	var newOption = document.createElement( "option" );
+	newOption.value = id;
+	newOption.text = "Layer " + ( id + 1 );
+	layerList.add( newOption, id );
+}
+
 /*
  * Clears the editor of all elements including
  * shapes, shape points, title, link, etc, but does
@@ -672,7 +785,7 @@ function loadShapes( shapes )
 function clearEditor()
 {
 	//TODO:  Handle other layers
-	
+	clearLayers();	
 	$("#shapeList > option").each( function ()
 	{
 		//console.log( "Deleting shape with id = " + this.value );

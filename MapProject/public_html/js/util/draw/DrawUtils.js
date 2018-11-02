@@ -26,6 +26,9 @@ function drawShape( points, id )
 
 function removeMapLayers()
 {
-	map.setTarget( null );
-	map = null;
+	if( map != undefined )
+	{
+		map.setTarget( null );
+		map = null;
+	}
 }
