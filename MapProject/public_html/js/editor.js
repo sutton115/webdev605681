@@ -10,13 +10,10 @@
 $( function() 
 {
 	//Set disabled to start
-	$("#shapeTitle").attr('readonly',true);
-	$("#shapeLink").attr('readonly',true);
+	setShapeEditable( false );
 	$("#pointList").attr('readonly',true);
 	$("#pointX").attr('readonly',true);
 	$("#pointY").attr('readonly',true);
-	$("#submit").attr('disabled',true);
-	$("#cancel").attr('disabled',true);
    
     const urlInput = $("#url");
 	
