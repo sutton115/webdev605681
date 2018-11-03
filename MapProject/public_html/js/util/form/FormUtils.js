@@ -218,14 +218,9 @@ function addNewShape()
         //Unselect option if applicable
         $("#shapeList option:selected").prop("selected", false);
 	
-	//Set button enabled state(s)
-	$("#shapeAdd").attr('disabled',true);
-	$("#shapeDelete").attr('disabled',true);
-	$("#submit").attr('disabled',false);
-	$("#cancel").attr('disabled',false);
-	
 	//Set shape editable
 	setShapeEditable( true );
+        $("#shapeDelete").attr('disabled',true);
         
     // Start Interaction (new polygon)
     addInteraction();
@@ -291,6 +286,8 @@ function deleteShape( id, removeFromStructure )
 	if( feature != undefined )
 		source.removeFeature( feature );
 	
+        setShapeEditable( false );
+        
 	return deleted;
 }
 
@@ -327,8 +324,11 @@ function clearShapePointList()
  */
 function setShapeEditable( bool )
 {
-	$("#shapeTitle").attr('readonly', !bool );
-	$("#shapeLink").attr('readonly', !bool );
+        $("#submit").attr('disabled',!bool);
+	$("#cancel").attr('disabled',!bool);
+        $("#shapeAdd").attr('disabled',bool);
+	$("#shapeDelete").attr('disabled',!bool);
+        $("#shapeList").attr('disabled',bool);
 }
 
 /*
@@ -338,10 +338,7 @@ function submitData()
 {
 	
 	// Control actions
-	$("#shapeAdd").attr('disabled',false);
-	$("#shapeDelete").attr('disabled',false);
-	//$("#submit").attr('disabled',true); // leave active for updates
-	$("#cancel").attr('disabled',true);
+	setShapeEditable( false );
 	
         var mapShape = getSelectedShape() ;
         if(mapShape == undefined){
@@ -353,7 +350,7 @@ function submitData()
         }
         
 	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-	let added = replaceOrAddShape( currentLayer, mapShape )
+	let added = replaceOrAddShape( currentLayer, mapShape );
 	
 	if( added == true )
 	{
@@ -433,7 +430,7 @@ function createShape()
 	var shape = new MapShape();
 	
 	let features = source.getFeatures();
-    let i = features.length - 1 ;
+     let i = features.length - 1 ;
 	shape.id = features[i].getId();
 	shape.points = getPolygonCoordinates();
 	shape.title = $("#shapeTitle").prop('value');
@@ -486,11 +483,6 @@ function cancelData()
 	}
 	
 	//Set button enabled state(s)
-	$("#shapeAdd").attr('disabled', false);
-	$("#shapeDelete").attr('disabled', false);
-	$("#submit").attr('disabled', true);
-	$("#cancel").attr('disabled', true );
-	
 	setShapeEditable( false );
 }
 
@@ -572,6 +564,7 @@ function displayData()
 		setField( "shapeLink", shapeToLoad.url );
 		clearShapePointList();
 		populateShapePointList( shapeToLoad.points );
+                setShapeEditable(true);
 	}
 }
 
