@@ -14,6 +14,7 @@ $( function()
 	$("#pointList").attr('readonly',true);
 	$("#pointX").attr('readonly',true);
 	$("#pointY").attr('readonly',true);
+        $("#shapeAdd").attr('disabled',true);
    
     const urlInput = $("#url");
 	
@@ -146,6 +147,7 @@ $( function()
 				$("#Continue").css("background","#DDDDDD");
 				$("#cross").show();
 			}
+        $("#Continue").on("click", setShapeEditable( false ));
     }); // End URL input change
 
 /* MES - Not positive this is ever called
