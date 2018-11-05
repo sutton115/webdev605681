@@ -6,6 +6,11 @@
 	Modification History:
 */
 
+/*
+ * Draws a new shape with the specified points 
+ * on to the map and sets the specified id on the
+ * resulting feature object
+ */
 function drawShape( points, id )
 {
 	//console.log( "Drawing Shape with id" + id );
@@ -24,6 +29,11 @@ function drawShape( points, id )
 	source.addFeature( newFeature ) ;
 }
 
+/*
+ * Clears the current graphical map.  Useful when
+ * the editor's visual map component needs to be 
+ * cleared or reset ( e.g. During layer changes, re-init ).
+ */
 function removeMapLayers()
 {
 	if( map != undefined )
