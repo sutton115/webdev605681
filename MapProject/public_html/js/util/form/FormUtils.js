@@ -315,6 +315,7 @@ function clearShapeEditor()
 function clearShapePointList()
 {
 	var points = document.getElementById("pointList");
+        if(points == undefined) return ;
 	var length = points.options.length;
 	for (i = 0; i < length; i++) 
 	{
