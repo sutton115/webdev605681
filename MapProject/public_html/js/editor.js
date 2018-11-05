@@ -50,11 +50,39 @@ $( function()
 			imgObj.onload = function( data )
 			{
 				createMapDisplay( data, url );
+				loadMapData();	
+				// create select interaction to highlight shapes when clicked
+				selectController = createSelectController();	
+				selectController.on( "select", handleSelection );
+				map.addInteraction( selectController );
 				urlInput.removeClass('redBorder');
 				$("#cross").hide();
 				$("#close").click();
+				
+				var toolTip = $( "#toolTip" );
+				toolTip.tooltip(
+				{
+				  animation: false,
+				  trigger: 'manual'
+				});
+
+				map.on('pointermove', function( evt ) 
+				{
+				  if ( evt.dragging ) 
+				  {
+					toolTip.tooltip('hide');
+					return;
+				  }
+				  displayToolTip( map.getEventPixel( evt.originalEvent ), "toolTip" );
+				});
+
+				map.on( "click", function( evt ) 
+				{
+				  displayToolTip( evt.pixel );
+				});
 			};
-			imgObj.onerror = function(){
+			imgObj.onerror = function()
+			{
 				console.log('fdf');
 				urlInput.addClass('redBorder');
 				$("#Continue").css("background","#DDDDDD");

@@ -131,12 +131,6 @@ function createMapDisplay( data, url )
 	  target: 'map',
 	  view: view1
 	});
-	
-	loadMapData();	
-	// create select interaction to highlight shapes when clicked
-	selectController = createSelectController();	
-	selectController.on( "select", handleSelection );
-	map.addInteraction( selectController );
 };
 
 
@@ -173,4 +167,33 @@ function handleSelection( e )
 		feature = features[0];
 		$("#shapeList").val( feature.getId() ).trigger('change');
 	}		
+}
+
+function displayToolTip( pixel, elementId )
+{
+	var toolTip = $( "#" + elementId );
+	
+	toolTip.css(
+	{
+		left: ( pixel[0] + 20 ) + 'px',
+		top: ( pixel[1] + 90 ) + 'px'
+	});
+	
+	var feature = map.forEachFeatureAtPixel( pixel, function( feature, layer ) { return feature; });
+	if( feature ) 
+	{
+		var id = feature.getId();
+		var shape = getShapeById( getLayerById( imageMap, getSelectedLayerId() ), id );
+		
+		if( shape != undefined )
+		{
+			toolTip.tooltip( "hide" )
+				.attr('data-original-title', shape.title )
+				.tooltip( "show" );
+		}
+	} 
+	else 
+	{
+		toolTip.tooltip('hide');
+	}
 }

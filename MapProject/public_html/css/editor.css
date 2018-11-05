@@ -54,6 +54,14 @@ h1
 	margin : 0px 10px 0px 0px;
 }
 
+#toolTip 
+{
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  z-index: 100;
+}
+
 .buttonClass
 {
 	margin : 0px 10px 0px 0px
