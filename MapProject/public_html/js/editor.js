@@ -136,10 +136,24 @@ $( function()
 					loadShapes( shapes );
 					displayData();
 					
-					// select interaction working on "click"
+					// create select interaction to highlight shapes when clicked
 					selectController = new ol.interaction.Select({
 					condition: ol.events.condition.click
 					});
+					
+					selectController.on( "select", function(e) 
+					{
+						//Get selected features
+						var features = e.selected;
+						var feature;
+						
+						//TODO???: Handle multi-select?
+						if( features != undefined )
+						{
+							feature = features[0];
+							$("#shapeList").val( feature.getId() ).trigger('change');
+						}						
+					});					
 			
 					map.addInteraction( selectController );
 				};
