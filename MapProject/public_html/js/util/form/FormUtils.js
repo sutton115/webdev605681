@@ -615,8 +615,10 @@ function getSelectedShape()
 }
 
 /*
-* Display the selected polygon and its title and link
-*/
+ * Display the selected polygon and its title and link
+ * within the editor's field and highlight it within
+ * the map display
+ */
 function displayData()
 {
 	cancelData();
@@ -641,6 +643,7 @@ function displayData()
 		setField( "shapeLink", shapeToLoad.url );
 		clearShapePointList();
 		populateShapePointList( shapeToLoad.points );
+		selectShape( shapeToLoad );
 	}
 }
 

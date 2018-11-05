@@ -135,6 +135,13 @@ $( function()
 					var shapes = mapLayer.shapes;
 					loadShapes( shapes );
 					displayData();
+					
+					// select interaction working on "click"
+					selectController = new ol.interaction.Select({
+					condition: ol.events.condition.click
+					});
+			
+					map.addInteraction( selectController );
 				};
 				imgObj.onerror = function(){
 					console.log('fdf');
@@ -148,7 +155,7 @@ $( function()
 				urlInput.addClass('redBorder');
 				$("#Continue").css("background","#DDDDDD");
 				$("#cross").show();
-			}
+			}			
     }); // End URL input change
 
 /* MES - Not positive this is ever called

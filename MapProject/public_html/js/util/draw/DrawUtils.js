@@ -42,3 +42,27 @@ function removeMapLayers()
 		map = null;
 	}
 }
+
+/*
+ * Selects the specified shape within the map display
+ */
+function selectShape( shape )
+{
+  if( shape != undefined )
+	selectShapeById( shape.id );
+}
+
+/*
+ * Selects the shape associated with the specified 
+ * id within the map display
+ */
+function selectShapeById( shapeId )
+{
+	if( source != undefined && selectController != undefined )
+	{
+		var feature = source.getFeatureById( shapeId );
+		
+		selectController.getFeatures().clear();
+		selectController.getFeatures().push( feature );
+	}
+}
