@@ -138,7 +138,7 @@ $( function()
 					console.log('fdf');
 					urlInput.addClass('redBorder');
 					$("#Continue").css("background","#DDDDDD");
-					$("#cross").show()
+					$("#cross").show();
 				};
 			}
 			else 
