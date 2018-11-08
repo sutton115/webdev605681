@@ -5,7 +5,7 @@
     Purpose:     Utility logic that can be used to easily
 				 interact with the editor
 */
-
+var newLoad = false;
 /*
  Clears the text field within the editor with 
  specified id
@@ -566,6 +566,10 @@ function displayData()
 		populateShapePointList( shapeToLoad.points );
                 setShapeEditable(true);
 	}
+        if (newLoad){
+            cancelData();
+            newLoad = false;
+        }
 }
 
 /*
@@ -618,8 +622,9 @@ function loadImageMap( evt )
 			//Load the editor with the first layer
 			//by default
 			loadImageMapLayer( 0 );
+                        newLoad = true;
 		}	
-	}
+	};
 	fr.readAsText( imageMapFile );
 }
 
