@@ -764,11 +764,14 @@ function refreshLayers()
 function clearLayers()
 {
 	var mapLayers = document.getElementById("layerList");
-	var length = mapLayers.options.length;
-	for (i = 0; i < length; i++) 
-	{
-		$("#layerList option[value='" + i + "']").remove();
-	}
+        if( mapLayers )
+        {
+            var length = mapLayers.options.length;
+            for (i = 0; i < length; i++) 
+            {
+                    $("#layerList option[value='" + i + "']").remove();
+            }
+        }
 }
 
 /*
@@ -777,15 +780,18 @@ function clearLayers()
  */
 function loadLayers()
 {
-	var mapLayers = imageMap.layers;
-	var layerCount = mapLayers.length;
-	
-	for( var i = 0; i < layerCount; i++ )
-	{
-		console.log( "Adding layer with id " + i );
-		addLayerToLayerList( i );
-	}
-    $('#layerList').val( currentLayer );		
+    var mapLayers = imageMap.layers;
+    var layerCount = mapLayers.length;
+
+    if(layerCount)
+    {
+        for( var i = 0; i < layerCount; i++ )
+        {
+                console.log( "Adding layer with id " + i );
+                addLayerToLayerList( i );
+        }
+        $('#layerList').val( currentLayer );
+    }
 }
 
 /*
@@ -793,11 +799,14 @@ function loadLayers()
  */
 function addLayerToLayerList( id )
 {
-	var layerList = document.getElementById( "layerList" );
-	var newOption = document.createElement( "option" );
-	newOption.value = id;
-	newOption.text = "Layer " + ( id + 1 );
-	layerList.add( newOption, id );
+    var layerList = document.getElementById( "layerList" );
+    if(layerList)
+    {
+        var newOption = document.createElement( "option" );
+        newOption.value = id;
+        newOption.text = "Layer " + ( id + 1 );
+        layerList.add( newOption, id );
+    }
 }
 
 /*
