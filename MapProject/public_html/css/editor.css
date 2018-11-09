@@ -22,7 +22,7 @@ h1
 #shapeList
 {
 	height : 120px;
-	width : 300px;
+	width : 400px;
 }
 
 #CRUDButtonList
@@ -41,6 +41,17 @@ h1
 {
 	display : inline;
 	margin : 50px 0px 0px 10px;
+}
+
+#layerComponents
+{
+	margin : 0px 0px 0px 10px;
+}
+
+#layerList
+{
+	width : 100px;
+	margin : 0px 10px 0px 0px;
 }
 
 .buttonClass

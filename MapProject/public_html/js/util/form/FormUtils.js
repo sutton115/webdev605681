@@ -96,40 +96,6 @@ function setRadioEnabled( elementId, bool )
 }
 
 /*
- * Populates the editor with the data from the
- * specified image map
- */
-function populateForm( imageMap )
-{
-	//TODO This method should populate all form elements
-	//with the values of a given map object
-}
-
-/*
- * Creates an image map object from the data currently existing
- * within the editor fields
- */
-function createImageMapFromForm()
-{
-	//TODO need to implement so that form field
-	//values are extracted and set on the image map
-	//object
-}
-
-/*
- * Populates the specified image map with the data
- * currently within the editor's fields
- */
-function populateImageMap( imageMap )
-{
-	if( imageMap.instanceType == "imageMap" )
-	{	
-		populateMapLayers( imageMap.layers );
-	}
-}
-
-
-/*
  * Sets the value of the specified element to
  * checked
  */
@@ -168,9 +134,13 @@ function setSelected( elementId, selectedValue )
  */
 function getSelectedLayerId()
 {
-	return 0;
+	return currentLayer;
 }
 
+/*
+ * Returns the id of the currently selected
+ * shape
+ */
 function getSelectedShapeId()
 {
 	var selectedOption = $("#shapeList option:selected");
@@ -178,8 +148,8 @@ function getSelectedShapeId()
 }
 
 /*
- * returns the layer ( if it exists ) associated with the
- * provided layer id
+ * Returns the layer ( if it exists ) associated with the
+ * provided image map and layer id
  */
 function getLayerById( imageMap, layerId )
 {
@@ -193,7 +163,7 @@ function getLayerById( imageMap, layerId )
 
 /*
  * Returns the shape associated with the specified
- * id and layer if it exists
+ * layer and id ( if it exists )
  */
 function getShapeById( mapLayer, shapeId )
 {
@@ -206,17 +176,95 @@ function getShapeById( mapLayer, shapeId )
 }
 
 /*
+ * Adds a new layer to the current image map
+ * object and refreshes the layer list to include
+ * the newly created layer.
+ */
+function addNewLayer()
+{
+	if( map != undefined )
+		removeMapLayers();
+	
+	clearEditor();	
+	var mapLayers = imageMap.layers;
+	var mapLayer = new MapLayer();
+	mapLayer.id = mapLayers.length;	
+	console.log( "New Map Layer id set to " + mapLayer.id );
+	mapLayers.push( mapLayer );
+	currentLayer = mapLayer.id;
+	refreshLayers();
+}
+
+/*
+ * Deletes the currently selected layer from the
+ * image map object and loads the next layer
+ * contained within the image map object into
+ * the editor.  If the deleted layer is the
+ * last layer in the image map, the previous
+ * layer will be loaded and if it is the only
+ * layer in the image map, the editor will be
+ * cleared.
+ */
+function deleteSelectedLayer()
+{
+	var layerId = getSelectedLayerId();
+	var nextLayerToLoad = -1;
+	var mapLayers = imageMap.layers;
+	var mapLayer;
+	
+	for( var i =0; i < mapLayers.length; i++ )
+	{
+		mapLayer = mapLayers[i];
+		
+		if( mapLayer.id == layerId )
+		{
+			//determine which ( if any ) layer should been
+			//loaded after the current layer is deleted
+			if( i < ( mapLayers.length - 1 ) )
+				nextLayerToLoad = i;
+			else
+				nextLayerToLoad = i - 1;
+			
+			//Remove the layer from the underlying object
+			mapLayers.splice( i, 1 );
+			
+			//Re-assigned the layer id values so that they
+			//always go from 0 to n
+			for( var j = 0; j < mapLayers.length; j++ )
+			{
+				mapLayer = mapLayers[j];
+				mapLayer.id = j;
+			}
+			//refresh the layer list
+			refreshLayers();
+			break;			
+		}		
+	}
+	
+	//If we've found another layer to load, load it
+	//Otherwise, just clear the editor
+	if( nextLayerToLoad > -1 )
+		loadImageMapLayer( nextLayerToLoad );
+	else
+	{
+		clearEditor();	
+	}
+	
+}
+
+/*
  * Sets the fields and appropriate
  * buttons to enabled or editable states
- * to allow modification
+ * to allow modification and enables 
+ * drawing for the user via addInteraction()
  */
 function addNewShape()
 {
 	//First clear editor fields
 	clearShapeEditor();
         
-        //Unselect option if applicable
-        $("#shapeList option:selected").prop("selected", false);
+	//Unselect option if applicable
+	$("#shapeList option:selected").prop("selected", false);
 	
 	//Set shape editable
 	setShapeEditable( true );
@@ -252,14 +300,16 @@ function deleteShape( id, removeFromStructure )
 	//be the selected shape
 	clearShapeEditor();
 	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-	var idToDelete = id;
-		
+	var shapes;
+	var idToDelete = id;		
 	let deleted = false;
-	var shapes = currentLayer.shapes;
+	
+	if( currentLayer != undefined )
+		shapes = currentLayer.shapes;
 	
 	//delete the shape id from the list
 	
-	if( removeFromStructure )  //Only delete the shape from the underlying data struture if this is true
+	if( removeFromStructure && shapes != undefined )  //Only delete the shape from the underlying data struture if this is true
 	{
 		for( var i = 0; i < shapes.length; i++ )
 		{
@@ -312,6 +362,7 @@ function clearShapeEditor()
 function clearShapePointList()
 {
 	var points = document.getElementById("pointList");
+        if(points == undefined) return ;
 	var length = points.options.length;
 	for (i = 0; i < length; i++) 
 	{
@@ -340,18 +391,25 @@ function submitData()
 	// Control actions
 	setShapeEditable( false );
 	
-        var mapShape = getSelectedShape() ;
-        if(mapShape == undefined){
-            // Creating a new shape
-            mapShape = createShape();
-        }else{
-            // Updating existing shape
-            updateShape(mapShape);
-        }
+	//If no shape is currently selected then it has yet
+	//to be saved so create it.  Otherwise, update the
+	//currently selected shape
+	var mapShape = getSelectedShape() ;
+	if( mapShape == undefined ){
+		// Creating a new shape
+		mapShape = createShape();
+	}
+	else
+	{
+		// Updating existing shape
+		updateShape(mapShape);
+	}
         
 	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
 	let added = replaceOrAddShape( currentLayer, mapShape );
 	
+	//If a new shape was added, then add it to the shape list also
+	//If it was just updated, select that shape in the list
 	if( added == true )
 	{
 		addShapeToShapeList( mapShape.id, mapShape.title );
@@ -363,7 +421,7 @@ function submitData()
 }
 
 /*
- * Adds and entry to the shape list with the specified
+ * Adds an entry to the shape list with the specified
  * id and title values
  */
 function addShapeToShapeList( id, title )
@@ -439,7 +497,10 @@ function createShape()
 	return shape;
 }
 
-
+/*
+ * Updates the specified shape's points,
+ * title, and link values
+ */
 function updateShape(shape)
 {
     shape.points = getPolygonCoordinates();
@@ -470,7 +531,10 @@ function cancelData()
 		let features = source.getFeatures();
 		let i = features.length - 1 ;
 		let feature = features[i];
-		var featureId = feature.getId();
+		var featureId;
+		
+		if( feature != undefined )
+			featureId = feature.getId();
 		
 		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
 		var shape = getShapeById( currentLayer, featureId );
@@ -489,6 +553,12 @@ function cancelData()
 /*
  * Updates the pointX and pointY editor values
  * upon selection of a new point
+ */
+ 
+/*
+ * This function handles the selection of a new
+ * point by updating the pointx and pointy values
+ * in the editor
  */
 function updateOnPointChange()
 {
@@ -514,7 +584,7 @@ function updateOnPointChange()
 }
 
 /*
- * Fetch Currently Selected Shape (if any)
+ * Returns the currently selected shape ( if any )
  */
 function getSelectedShape()
 {
@@ -538,8 +608,10 @@ function getSelectedShape()
 }
 
 /*
-* Display the selected polygon and its title and link
-*/
+ * Display the selected polygon and its title and link
+ * within the editor's field and highlight it within
+ * the map display
+ */
 function displayData()
 {
 	cancelData();
@@ -564,7 +636,7 @@ function displayData()
 		setField( "shapeLink", shapeToLoad.url );
 		clearShapePointList();
 		populateShapePointList( shapeToLoad.points );
-                setShapeEditable(true);
+		selectShape( shapeToLoad );
 	}
         if (newLoad){
             cancelData();
@@ -593,13 +665,14 @@ function populateShapePointList( points )
 
 /*
  * Loads a local image map file into the
- * editor.  
+ * editor.  This function loads the first layer
+ * ( id = 0 ) of the image map into the editor
+ * by default 
  */
 function loadImageMap( evt )
 {
 	//First we need to cancel any current unsaved
 	//Input or actions
-	cancelData();
 	clearEditor();
 	
 	//TODO: Handle multiple imageMaps
@@ -635,7 +708,17 @@ function loadImageMapLayer( layerId )
 {
 	currentLayer = layerId;
 	var mapLayer = imageMap.layers[layerId];
-	$("#url").val( mapLayer.url ).trigger('change');
+	
+	console.log( imageMap );
+	
+	if( mapLayer.url != "" )
+		$("#url").val( mapLayer.url ).trigger('change');
+	else
+	{
+		removeMapLayers();
+		clearEditor();
+		loadLayers();
+	}
 }
 
 /*
@@ -662,6 +745,68 @@ function loadShapes( shapes )
 }
 
 /*
+ * Refreshes the image map's layer list by clearing
+ * and rebuilding the list based on the data currently
+ * stored within the image map object
+ */
+function refreshLayers()
+{
+	clearLayers();
+	loadLayers();
+}
+
+/*
+ * Clears the layers editor of the editor
+ */
+function clearLayers()
+{
+	var mapLayers = document.getElementById("layerList");
+        if( mapLayers )
+        {
+            var length = mapLayers.options.length;
+            for (i = 0; i < length; i++) 
+            {
+                    $("#layerList option[value='" + i + "']").remove();
+            }
+        }
+}
+
+/*
+ * Loads an image map's layers into the layers
+ * editor
+ */
+function loadLayers()
+{
+    var mapLayers = imageMap.layers;
+    var layerCount = mapLayers.length;
+
+    if(layerCount)
+    {
+        for( var i = 0; i < layerCount; i++ )
+        {
+                console.log( "Adding layer with id " + i );
+                addLayerToLayerList( i );
+        }
+        $('#layerList').val( currentLayer );
+    }
+}
+
+/*
+ * Adds a new layer option to the list of layers
+ */
+function addLayerToLayerList( id )
+{
+    var layerList = document.getElementById( "layerList" );
+    if(layerList)
+    {
+        var newOption = document.createElement( "option" );
+        newOption.value = id;
+        newOption.text = "Layer " + ( id + 1 );
+        layerList.add( newOption, id );
+    }
+}
+
+/*
  * Clears the editor of all elements including
  * shapes, shape points, title, link, etc, but does
  * NOT remove the elements from the underlying data
@@ -670,7 +815,7 @@ function loadShapes( shapes )
 function clearEditor()
 {
 	//TODO:  Handle other layers
-	
+	clearLayers();	
 	$("#shapeList > option").each( function ()
 	{
 		//console.log( "Deleting shape with id = " + this.value );

@@ -7,7 +7,7 @@
 */
 
 // Global variables so we can access them later
-var map, draw, source ;
+var map, draw, source, selectController ;
 
 /*
  * Constructs a default shapePoint object
