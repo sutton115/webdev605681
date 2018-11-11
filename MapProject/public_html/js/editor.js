@@ -9,13 +9,13 @@
 
 $( function() 
 {
-	//Set disabled to start
-	setShapeEditable( false );
-	$("#pointList").attr('readonly',true);
-	$("#pointX").attr('readonly',true);
-	$("#pointY").attr('readonly',true);
-        $("#shapeAdd").attr('disabled',true);
-   
+    //Set disabled to start
+    setShapeEditable( false );
+    $("#pointList").attr('readonly',true);
+    $("#pointX").attr('readonly',true);
+    $("#pointY").attr('readonly',true);
+    $("#shapeAdd").attr('disabled',true);
+
     const urlInput = $("#url");
     $("#loadImageButton").click(function () {
         urlInput.val("");
@@ -69,13 +69,14 @@ $( function()
     }); // End URL input change
     
     $("#shapeAdd").on( "click", addNewShape );
-	$("#shapeDelete").on( "click", deleteSelectedShape );
-	$("#layerAdd").on( "click", addNewLayer );
-	$("#layerDelete").on( "click", deleteSelectedLayer );
-	$("#layerList").on( "change", function(){ loadImageMapLayer( $("#layerList").val() ) });
+    $("#shapeUpdate").on( "click", updateSelectedShape );
+    $("#shapeDelete").on( "click", deleteSelectedShape );
+    $("#layerAdd").on( "click", addNewLayer );
+    $("#layerDelete").on( "click", deleteSelectedLayer );
+    $("#layerList").on( "change", function(){ loadImageMapLayer( $("#layerList").val() ) });
     $("#submit").on("click", submitData);
     $("#cancel").on("click", cancelData);
     $("#shapeList").on("click change", displayData );
-	$("#saveToFile").on("click", saveToFile );
-	$("#loadImageMap").on("change", loadImageMap );
+    $("#saveToFile").on("click", saveToFile );
+    $("#loadImageMap").on("change", loadImageMap );
 });
