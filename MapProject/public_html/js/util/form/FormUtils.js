@@ -269,11 +269,22 @@ function addNewShape()
 	//Set shape editable
 	setShapeEditable( true );
         $("#shapeDelete").attr('disabled',true);
+        $("#shapeUpdate").attr('disabled',true);
         
     // Start Interaction (new polygon)
     addInteraction();
 }
 
+/*
+ * Sets fields available to be updated for selected shape
+ */
+function updateSelectedShape(){
+    setShapeEditable(true) ;
+
+    // Disable Update/Delete buttons
+    $("#shapeUpdate").attr('disabled',true);
+    $("#shapeDelete").attr('disabled',true);
+}
 /*
  * Deletes the currently selected shape.  By default,
  * this function will remove the shape from the underlying
@@ -375,11 +386,18 @@ function clearShapePointList()
  */
 function setShapeEditable( bool )
 {
+    // Enable/Disable CRUD buttons as appropriate
         $("#submit").attr('disabled',!bool);
 	$("#cancel").attr('disabled',!bool);
         $("#shapeAdd").attr('disabled',bool);
+	$("#shapeUpdate").attr('disabled',!bool);
 	$("#shapeDelete").attr('disabled',!bool);
         $("#shapeList").attr('disabled',bool);
+        
+        // Enable/Disable Form Fields
+        $("#shapeTitle").attr('disabled',!bool);
+        $("#shapeLink").attr('disabled',!bool);
+        $("#pointList").attr('disabled',!bool);
 }
 
 /*
@@ -417,6 +435,7 @@ function submitData()
 	else
 	{
 		$("#shapeList").val( mapShape.id );
+                $('#shapeList option:selected').text(mapShape.title) ;
     }
 }
 
@@ -637,6 +656,8 @@ function displayData()
 		clearShapePointList();
 		populateShapePointList( shapeToLoad.points );
 		selectShape( shapeToLoad );
+                $('#shapeUpdate').attr('disabled', false) ;
+                $('#shapeDelete').attr('disabled', false) ;
 	}
         if (newLoad){
             cancelData();
