@@ -735,9 +735,10 @@ function loadImageMapLayer( layerId )
 	console.log( imageMap );
 	
 	if( mapLayer.url != "" )
-		$("#url").val( mapLayer.url ).trigger('change');
-	else
-	{
+        {
+		$("#url").val( mapLayer.url ) ;
+                $("#Continue").click() ;
+        }else{
 		removeMapLayers();
 		clearEditor();
 		loadLayers();
