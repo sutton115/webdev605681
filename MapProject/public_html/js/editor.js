@@ -22,6 +22,10 @@ $( function()
         //linkInput.val("");
     });
 
+    $('#exampleModal').on('hide.bs.modal', function () {
+      urlInput.val("");
+	});
+
     function callback(data)
 	{
         //console.log(data);
@@ -32,9 +36,9 @@ $( function()
     let preH = 400;
 
 	//The image URL part
-    urlInput.on('change',function () 
+    $("#Continue").click(function ()
 	{
-        const url = $(this).val();
+        const url = $("#url").val();
         if ((url.startsWith("http://") || url.startsWith("https://"))&&
             (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".gif") || url.endsWith(".jpeg")|| url.endsWith(".JPG")|| url.endsWith(".JPEG")|| url.endsWith(".$")|| url.endsWith(".GIF")) ) 
 		{
@@ -47,10 +51,11 @@ $( function()
 			//After the image is loaded, display it on the canvas.
 			imgObj.onload = function( data )
 			{
-				createMapDisplay( data, url );
 				urlInput.removeClass('redBorder');
 				$("#cross").hide();
 				$("#close").click();
+				createMapDisplay( data, url );
+				
 			};
 			imgObj.onerror = function(){
 				console.log('fdf');
