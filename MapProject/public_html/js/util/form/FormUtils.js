@@ -553,16 +553,18 @@ function cancelData()
 		var featureId;
 		
 		if( feature != undefined )
-			featureId = feature.getId();
-		
-		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-		var shape = getShapeById( currentLayer, featureId );
-		
-		if( shape == undefined )
-		{
+                {
+                    featureId = feature.getId();
+
+                    var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+                    var shape = getShapeById( currentLayer, featureId );
+
+                    if( shape == undefined )
+                    {
 			//console.log( "Deleting shape " + featureId );
 			deleteShape( featureId, false );		
-		}
+                    }
+                }
 	}
 	
 	//Set button enabled state(s)
@@ -761,8 +763,8 @@ function loadShapes( shapes )
 	}
 	
 	shape = shapes[0];
-	//select the first shape in the list after loading
-	$("#shapeList").val( shape.id );
+	// select nothing in the shape list after loading
+	$("#shapeList").val( [] );
 }
 
 /*
