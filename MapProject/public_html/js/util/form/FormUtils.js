@@ -397,17 +397,16 @@ function clearShapePointList()
 function setShapeEditable( bool )
 {
     // Enable/Disable CRUD buttons as appropriate
-        $("#submit").attr('disabled',!bool);
+    $("#submit").attr('disabled',!bool);
 	$("#cancel").attr('disabled',!bool);
-        $("#shapeAdd").attr('disabled',bool);
-	$("#shapeUpdate").attr('disabled',!bool);
+    $("#shapeAdd").attr('disabled',bool);
+	$("#shapeUpdate").attr('disabled',bool);
 	$("#shapeDelete").attr('disabled',!bool);
-        $("#shapeList").attr('disabled',bool);
+    $("#shapeList").attr('disabled',bool);
         
-        // Enable/Disable Form Fields
-        $("#shapeTitle").attr('disabled',!bool);
-        $("#shapeLink").attr('disabled',!bool);
-        $("#pointList").attr('disabled',!bool);
+    // Enable/Disable Form Fields
+    $("#shapeTitle").attr('disabled',!bool);
+    $("#shapeLink").attr('disabled',!bool);
 }
 
 /*
@@ -436,9 +435,11 @@ function submitData()
 	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
 	let added = replaceOrAddShape( currentLayer, mapShape );
 	
+	//After a shape has been submitted, we should re-enable the selection feature
+	map.addInteraction( selectController );
+
 	//If a new shape was added, then add it to the shape list also
 	//If it was just updated, select that shape in the list
-	map.addInteraction( selectController );
 	if( added == true )
 	{
 		addShapeToShapeList( mapShape.id, mapShape.title );
@@ -542,7 +543,7 @@ function createShape()
  */
 function updateShape(shape)
 {
-    shape.points = getPolygonCoordinates();
+    shape.points = getPolygonCoordinatesByFeatureId( shape.id );
     shape.title = $("#shapeTitle").prop('value');
     shape.url = $("#shapeLink").prop('value');	
 }
