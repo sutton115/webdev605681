@@ -428,6 +428,7 @@ function submitData()
 	
 	//If a new shape was added, then add it to the shape list also
 	//If it was just updated, select that shape in the list
+	map.addInteraction( selectController );
 	if( added == true )
 	{
 		addShapeToShapeList( mapShape.id, mapShape.title );
@@ -553,18 +554,18 @@ function cancelData()
 		var featureId;
 		
 		if( feature != undefined )
-                {
-                    featureId = feature.getId();
+        {
+			featureId = feature.getId();
 
-                    var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-                    var shape = getShapeById( currentLayer, featureId );
+			var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+			var shape = getShapeById( currentLayer, featureId );
 
-                    if( shape == undefined )
-                    {
-			//console.log( "Deleting shape " + featureId );
-			deleteShape( featureId, false );		
-                    }
-                }
+			if( shape == undefined )
+			{
+				//console.log( "Deleting shape " + featureId );
+				deleteShape( featureId, false );		
+			}
+		}
 	}
 	
 	//Set button enabled state(s)
@@ -813,6 +814,42 @@ function loadLayers()
         }
         $('#layerList').val( currentLayer );
     }
+}
+
+function refreshShapeList()
+{
+	clearShapeList();
+	loadShapeList();
+}
+
+/*
+ * Clears the layers editor of the editor
+ */
+function clearShapeList()
+{
+	var mapLayers = document.getElementById("layerList");
+	var length = mapLayers.options.length;
+	for (i = 0; i < length; i++) 
+	{
+		$("#layerList option[value='" + i + "']").remove();
+	}
+}
+
+/*
+ * Loads an image map's layers into the layers
+ * editor
+ */
+function loadShapeList()
+{
+	var mapLayers = imageMap.layers;
+	var layerCount = mapLayers.length;
+	
+	for( var i = 0; i < layerCount; i++ )
+	{
+		console.log( "Adding layer with id " + i );
+		addLayerToLayerList( i );
+	}
+    $('#layerList').val( currentLayer );		
 }
 
 /*

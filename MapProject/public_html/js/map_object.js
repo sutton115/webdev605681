@@ -120,6 +120,8 @@ function MapObject( options )
 function addInteraction() {
     if(draw)
         map.removeInteraction(draw);
+	
+	map.removeInteraction( selectController );
     
     draw = new ol.interaction.Draw({
         source: source,

@@ -233,6 +233,8 @@ function handleSelection( e )
 	if( features != undefined )
 	{
 		feature = features[0];
-		$("#shapeList").val( feature.getId() ).trigger('change');
+		
+		if( feature != undefined )
+			$("#shapeList").val( feature.getId() ).trigger('change');
 	}		
 }
