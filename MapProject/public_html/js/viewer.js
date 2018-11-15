@@ -55,6 +55,28 @@ function loadImageFromUrl(url)
     //After the image is loaded, display it on the canvas.
     imgObj.onload = function(data){
         createMapDisplay( data, url );
+
+        // Add MouseWheelZoom Interaction
+        var mapZoom = new ol.interaction.MouseWheelZoom() ;
+	map.addInteraction(mapZoom);
+        
+        // Allow rotate-map when holding shift-key
+        var mapRotate = new ol.interaction.DragRotate({
+            condition: ol.events.condition.shiftKeyOnly
+        }) ;
+	map.addInteraction(mapRotate);
+        
+        var northControl = new ol.control.Rotate({
+            autoHide: false
+        }) ;
+	map.addControl(northControl);
+        
+        // Allow Fullscreen
+        var fullScreen = new ol.control.FullScreen();
+	map.addControl(fullScreen);
+        
+        $('#map').after('<span class="instruction">Hold Shift-key and drag-to-rotate</span>') ;
+        
         map.on('click', function(evt) {
             //console.log('map clicked');
             var feature = map.forEachFeatureAtPixel(evt.pixel,
