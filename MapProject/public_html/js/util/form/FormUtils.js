@@ -284,6 +284,10 @@ function updateSelectedShape(){
     // Disable Update/Delete buttons
     $("#shapeUpdate").attr('disabled',true);
     $("#shapeDelete").attr('disabled',true);
+    
+    //addPolyModInteraction() ;
+    polyMod = new modifyPolygon() ;
+    polyMod.start() ;
 }
 /*
  * Deletes the currently selected shape.  By default,
@@ -437,7 +441,13 @@ function submitData()
 	{
 		$("#shapeList").val( mapShape.id );
                 $('#shapeList option:selected').text(mapShape.title) ;
-    }
+        }
+        
+        if(polyMod)
+        {
+                polyMod.end() ;
+                polyMod = null ;
+        }
 }
 
 /*
@@ -533,9 +543,6 @@ function updateShape(shape)
 */
 function cancelData()
 {
-	//First clear editor fields
-	clearShapeEditor();
-        
 	//End interaction (if any)
 	if(draw) 
 		map.removeInteraction(draw);
@@ -554,7 +561,7 @@ function cancelData()
 		var featureId;
 		
 		if( feature != undefined )
-        {
+                {
 			featureId = feature.getId();
 
 			var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
@@ -564,11 +571,24 @@ function cancelData()
 			{
 				//console.log( "Deleting shape " + featureId );
 				deleteShape( featureId, false );		
-			}
+			}else if(polyMod){
+                            
+                                polyMod.revert() ;
+                            
+                        }
 		}
 	}
 	
-	//Set button enabled state(s)
+        // Remove modify interaction (if any)
+        if(polyMod){
+            polyMod.end() ;
+            polyMod = null ;
+        }
+        
+        // Clear editor fields
+	clearShapeEditor();
+        
+	// Set button enabled state(s)
 	setShapeEditable( false );
 }
 

@@ -7,7 +7,7 @@
 */
 
 // Global variables so we can access them later
-var map, draw, source, selectController ;
+var map, draw, polyMod, source, selectController ;
 
 /*
  * Constructs a default shapePoint object
@@ -121,7 +121,7 @@ function addInteraction() {
     if(draw)
         map.removeInteraction(draw);
 	
-	map.removeInteraction( selectController );
+    map.removeInteraction( selectController );
     
     draw = new ol.interaction.Draw({
         source: source,
@@ -130,29 +130,32 @@ function addInteraction() {
     map.addInteraction(draw);
     draw.setActive(true) ;
 
-    draw.on('drawend', function()
-	{
+    draw.on('drawend', function(e)
+    {
         map.removeInteraction(draw);
-        //draw.setActive(false) ;
+        
+        // Immediately allow to modify
+        polyMod = new modifyPolygon() ;
+        polyMod.start(e.feature) ;
     });
 	
-	source.on('addfeature', function (event) 
-	{
-		var feature = event.feature;
-		
-		if( feature != undefined )
-		{
-			if( feature.getId() == undefined )
-				feature.setId( Math.floor( Math.random() * 1000000 ) );
-			var points = getPolygonCoordinates();
-			//This is a hack until I can figure out
-			//how to correctly execute this logic only
-			//once
-			clearShapePointList();
-			populateShapePointList( points );
-			updateOnPointChange();
-		}
-	});
+    source.on('addfeature', function (event) 
+    {
+            var feature = event.feature;
+
+            if( feature != undefined )
+            {
+                    if( feature.getId() == undefined )
+                            feature.setId( Math.floor( Math.random() * 1000000 ) );
+                    var points = getPolygonCoordinates();
+                    //This is a hack until I can figure out
+                    //how to correctly execute this logic only
+                    //once
+                    clearShapePointList();
+                    populateShapePointList( points );
+                    updateOnPointChange();
+            }
+    });
 }
 
 function getPolygonCoordinates(){
@@ -170,4 +173,59 @@ function getPolygonCoordinatesByFeatureId( featureId )
     let tCoord = feature.getGeometry().getCoordinates() ;
 	tCoord = tCoord[0];
     return tCoord ;
+}
+
+function modifyPolygon(){
+    this.shapeId = 0 ;
+    this.origCoord = 0 ;
+    this.origFeat = 0 ;
+    this.modInt = 0 ;
+    
+    //function addPolyModInteraction(){
+    this.start = function(newFeat){
+        if(newFeat)
+        {
+            // must be a brand new shape
+            this.origFeat = newFeat ;
+        }else{
+            // Must be an existing feature (selected for update)
+            this.shapeId = getSelectedShapeId() ;
+            this.origFeat = source.getFeatureById( this.shapeId );
+            this.origCoord = this.origFeat.getGeometry().getCoordinates() ;
+        }
+        
+        let collection = new ol.Collection() ;
+        collection.push(this.origFeat) ;
+
+        this.modInt = new ol.interaction.Modify({
+            //source: source,
+            features: collection
+        });
+            
+        map.addInteraction(this.modInt);
+    }
+    
+    this.end = function(){
+        // End Interaction
+        if(this.modInt)
+            map.removeInteraction(this.modInt);
+        
+        // Reset attributes
+        this.shapeId = 0 ;
+        this.origCoord = 0 ;
+        this.origFeat = 0 ;
+        this.modInt = 0 ;
+    }
+
+    this.revert = function(){
+        // If this was a modification, reset the shape
+        if( this.origCoord )
+        {
+            // Restore original coordinates
+            let newGeom = new ol.geom.Polygon(this.origCoord) ;
+            this.origFeat.setGeometry(newGeom) ;
+        }
+        this.end() ;
+    }
+    return this ;
 }

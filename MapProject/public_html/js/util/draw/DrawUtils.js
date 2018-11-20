@@ -192,8 +192,9 @@ function createMapDisplay( data, url )
 		condition: ol.events.condition.mouseOnly,
 		style:changeStyle
 	});
-
 	map.addInteraction(selectClick);
+	var mouseZoom = new ol.interaction.MouseWheelZoom();
+	map.addInteraction(mouseZoom);
 	loadMapData();	
 	// create select interaction to highlight shapes when clicked
 	selectController = createSelectController();	
