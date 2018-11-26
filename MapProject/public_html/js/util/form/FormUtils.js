@@ -260,17 +260,20 @@ function deleteSelectedLayer()
  */
 function addNewShape()
 {
-	//First clear editor fields
-	clearShapeEditor();
-        
-	//Unselect option if applicable
-	$("#shapeList option:selected").prop("selected", false);
-	
-	//Set shape editable
-	setShapeEditable( true );
-        $("#shapeDelete").attr('disabled',true);
-        $("#shapeUpdate").attr('disabled',true);
-        
+    //First clear editor fields
+    clearShapeEditor();
+
+    //Unselect option if applicable
+    $("#shapeList option:selected").prop("selected", false);
+
+    //Set shape editable
+    setShapeEditable( true );
+    $("#shapeDelete").attr('disabled',true);
+    $("#shapeUpdate").attr('disabled',true);
+
+    // Disable selectClick interaction to prevent inadvertent cancellation
+    selectController.setActive(false) ;
+
     // Start Interaction (new polygon)
     addInteraction();
 }
@@ -285,6 +288,9 @@ function updateSelectedShape(){
     $("#shapeUpdate").attr('disabled',true);
     $("#shapeDelete").attr('disabled',true);
     
+    // Disable selectClick interaction to prevent inadvertent cancellation
+    selectController.setActive(false) ;
+
     //addPolyModInteraction() ;
     polyMod = new modifyPolygon() ;
     polyMod.start() ;
@@ -448,6 +454,9 @@ function submitData()
                 polyMod.end() ;
                 polyMod = null ;
         }
+        
+        // Restore selectClick interaction
+        selectController.setActive(true) ;
 }
 
 /*
@@ -590,6 +599,11 @@ function cancelData()
         
 	// Set button enabled state(s)
 	setShapeEditable( false );
+        
+        // Restore selectClick interaction
+        if(selectController){
+            selectController.setActive(true) ;
+        }
 }
 
 /*
