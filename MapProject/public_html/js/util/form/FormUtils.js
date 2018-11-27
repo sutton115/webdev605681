@@ -189,7 +189,7 @@ function addNewLayer()
 	var mapLayers = imageMap.layers;
 	var mapLayer = new MapLayer();
 	mapLayer.id = mapLayers.length;	
-	console.log( "New Map Layer id set to " + mapLayer.id );
+	//console.log( "New Map Layer id set to " + mapLayer.id );
 	mapLayers.push( mapLayer );
 	currentLayer = mapLayer.id;
 	refreshLayers();
@@ -251,6 +251,31 @@ function deleteSelectedLayer()
 	}
 	
 }
+
+/*
+ * Updates the currently selected layer within the
+ * image map object 
+ */
+function updateSelectedLayer()
+{
+	var layerId = getSelectedLayerId();
+	var mapLayers = imageMap.layers;
+	var mapLayer;
+	
+	for( var i =0; i < mapLayers.length; i++ )
+	{
+		mapLayer = mapLayers[i];
+		
+		if( mapLayer.id == layerId )
+		{
+			mapLayer.minZoom = $("#minZoom").prop('value');	
+			mapLayer.maxZoom = $("#maxZoom").prop('value');		
+			break;			
+		}		
+	}	
+}
+
+
 
 /*
  * Sets the fields and appropriate
@@ -355,7 +380,10 @@ function deleteShape( id, removeFromStructure )
 	var feature = source.getFeatureById( id );
 	
 	if( feature != undefined )
+	{
+		console.log( "Removing feature from map" );
 		source.removeFeature( feature );
+	}
 	
         setShapeEditable( false );
         
@@ -779,6 +807,8 @@ function loadImageMapLayer( layerId )
 		clearEditor();
 		loadLayers();
 	}
+	$("#minZoom").val( mapLayer.minZoom );	
+	$("#maxZoom").val( mapLayer.maxZoom );	
 }
 
 /*
@@ -844,10 +874,11 @@ function loadLayers()
     {
         for( var i = 0; i < layerCount; i++ )
         {
-                console.log( "Adding layer with id " + i );
+                //console.log( "Adding layer with id " + i );
                 addLayerToLayerList( i );
         }
         $('#layerList').val( currentLayer );
+		
     }
 }
 
@@ -881,7 +912,7 @@ function loadShapeList()
 	
 	for( var i = 0; i < layerCount; i++ )
 	{
-		console.log( "Adding layer with id " + i );
+		//console.log( "Adding layer with id " + i );
 		addLayerToLayerList( i );
 	}
     $('#layerList').val( currentLayer );		
