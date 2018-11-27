@@ -774,6 +774,21 @@ function loadImageMap( evt )
 		}	
 	};
 	fr.readAsText( imageMapFile );
+        
+        let newName = baseName($(this).val()) ;
+        $('#fileName').val(newName) ;
+        $(this).val('');
+}
+
+function baseName(str)
+{
+    if(str.includes('/')){
+        var base = new String(str).substring(str.lastIndexOf('/') + 1); 
+    }else{
+        var base = new String(str).substring(str.lastIndexOf('\\') + 1); 
+    }
+   
+    return base;
 }
 
 /*
