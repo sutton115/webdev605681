@@ -86,11 +86,20 @@
 		<div id="map" class="map"></div>
 		
 		<div id="layerComponents">
+		
+			<div id = "layerControls">
+				<input type = "button" id = "layerAdd" class="buttonClass" value = "Add Layer" />
+				<input type = "button" id = "layerDelete" class="buttonClass" value = "Remove Layer" />
+				<input type = "button" id = "layerUpdate" class="buttonClass" value = "Update Layer" />
+			</div>
 			Layers: 
 			<select id="layerList"></select>
-			<input type = "button" id = "layerAdd" class="buttonClass" value = "Add Layer" />
-			<input type = "button" id = "layerDelete" class="buttonClass" value = "Remove Layer" />
+			Min Zoom: <input class = "quantityEditors" type = "number" id = "minZoom" min ="1" max = "20" />
+			Max Zoom: <input class = "quantityEditors" type = "number" id = "maxZoom" min ="1" max = "20" />
+			
 		</div>
+		
+		
 		
 		<div id="ShapeListPanel" class="form-inline" >		
 		
