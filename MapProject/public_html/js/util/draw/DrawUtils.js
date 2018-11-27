@@ -131,6 +131,12 @@ function createMapDisplay( data, url )
 	  target: 'map',
 	  view: view1
 	});
+	$("#zoomlevel").val(map.getView().getZoom());
+
+	map.getView().on('change:resolution', function () {
+		//console.log(map.getView().getZoom());
+		$("#zoomlevel").val(Math.floor(map.getView().getZoom()));
+	});
 	var baseTextStyle = {
          font: '24px Calibri,sans-serif',
          textAlign: 'center',
