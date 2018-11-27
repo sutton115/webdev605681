@@ -16,7 +16,7 @@
         <link rel = "stylesheet" href = "css/editor.css">
         
         <!-- Scripts -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.2.0/build/ol.js"></script>
@@ -102,13 +102,14 @@
             -->
             <div id = "shapeInput">
 				<div class="shapeEditorComponents">Title: <input type = "text" id = "shapeTitle" /></div>
-				<div class="shapeEditorComponents">Link: <input type = "text" id = "shapeLink" /></div>
+				<div class="shapeEditorComponents">Link: <input type = "text" id = "shapeLink" placeholder="https or http.." /></div>
 				<div class="shapeEditorComponents">
 					Points:    
 					<select id="pointList" class="comboBox" onchange="updateOnPointChange()">
 					</select></div>
 				<div class="shapeEditorComponents">X Pos: <input type = "number" id = "pointX" /></div>
 				<div class="shapeEditorComponents">Y Pos: <input type = "number" id = "pointY" /></div>
+                <div class="shapeEditorComponents">Zoom Level: <input type = "number" id = "zoomlevel" /></div>
             </div>
 		</div>
 

@@ -31,7 +31,10 @@ $( function()
         //console.log(data);
         return data;
     }
-    
+    function isPositiveInteger(s){
+		     var re = /^[0-9]+$/ ;
+		     return re.test(s);
+		 }
 	let preW = 800;
     let preH = 400;
 
@@ -84,4 +87,16 @@ $( function()
     $("#shapeList").on("click change", displayData );
     $("#saveToFile").on("click", saveToFile );
     $("#loadImageMap").on("change", loadImageMap );
+    $("#zoomlevel").on("change", function() {
+				var v = $(this).val();
+				if(isPositiveInteger(v)) {
+					var vi = parseInt(v);
+					if(vi>map.getView().getMaxZoom()) vi=map.getView().getMaxZoom();
+					if(vi<0) vi=0;
+					var view = map.getView().setZoom(vi);
+						$(this).val(vi);
+				} else {
+					$(this).val(Math.floor(map.getView().getZoom()));
+				}
+		});
 });
