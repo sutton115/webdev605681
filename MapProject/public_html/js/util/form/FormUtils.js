@@ -186,13 +186,17 @@ function addNewLayer()
 		removeMapLayers();
 	
 	clearEditor();	
+        var layerId = getSelectedLayerId();    
 	var mapLayers = imageMap.layers;
+        var persistImage = mapLayers[layerId].url;
 	var mapLayer = new MapLayer();
 	mapLayer.id = mapLayers.length;	
 	console.log( "New Map Layer id set to " + mapLayer.id );
+	mapLayer.url = persistImage;
 	mapLayers.push( mapLayer );
 	currentLayer = mapLayer.id;
 	refreshLayers();
+        loadImageMapLayer( $("#layerList").val() );
 }
 
 /*
