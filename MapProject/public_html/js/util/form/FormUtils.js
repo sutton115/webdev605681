@@ -463,42 +463,41 @@ function submitData()
 		updateShape(mapShape);
 	}
         
-
+	
 	$.getJSON({url:" https://hakureimap.appspot.com/proxy?address="+mapShape.url+"&jsoncallback=?",
 	  success: function(json){
 	    //console.log(json);
 			if(json==200||json==302||json==301) {
-
 				setShapeEditable( false );
-				alert("update successfully");
-				var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-				let added = replaceOrAddShape( currentLayer, mapShape );
-
-				//If a new shape was added, then add it to the shape list also
-				//If it was just updated, select that shape in the list
-				map.addInteraction( selectController );
-				if( added == true )
-				{
-					addShapeToShapeList( mapShape.id, mapShape.title );
-				}
-				else
-				{
-					$("#shapeList").val( mapShape.id );
-			                $('#shapeList option:selected').text(mapShape.title) ;
-			    }
-			    if(polyMod)
-                {
-                polyMod.end() ;
-                polyMod = null ;
-                }
+				alert("Valid URL");
+				
 			} else {
-				alert("Unavailable link, please retry");
-					setShapeEditable( true );
+				alert("Unavailable link");
 
 			}
 		}
 	});
         
+	var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+	let added = replaceOrAddShape( currentLayer, mapShape );
+
+	//If a new shape was added, then add it to the shape list also
+	//If it was just updated, select that shape in the list
+	map.addInteraction( selectController );
+	if( added == true )
+	{
+		addShapeToShapeList( mapShape.id, mapShape.title );
+	}
+	else
+	{
+		$("#shapeList").val( mapShape.id );
+	    $('#shapeList option:selected').text(mapShape.title) ;
+	}
+	if(polyMod)
+    {
+        polyMod.end() ;
+        polyMod = null ;
+    }
         // Restore selectClick interaction
         selectController.setActive(true) ;
 }
