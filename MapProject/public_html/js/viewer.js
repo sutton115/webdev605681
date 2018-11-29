@@ -79,10 +79,18 @@ function loadImageFromUrl(url)
         map.on('click', function(evt) {
             //console.log('map clicked');
             var feature = map.forEachFeatureAtPixel(evt.pixel,
-                function(feature, layer) {
-                    let thisId = feature.getId() ;
+                function(feature, layer) 
+				{
+					console.log( "Feature: " );
+					console.log( feature );
+                    let thisId = feature.getId();
+					console.log( "Feature Id: " );
+					console.log( thisId );
 
-                    let thisShape = getShapeById( mapLayer, thisId ) ;
+                    let thisShape = getShapeById( mapLayer, thisId );
+					console.log( "Shape: " );
+					console.log( thisShape );
+					
                     if( thisShape.url )
                     {
                         window.open(thisShape.url, '_blank') ;

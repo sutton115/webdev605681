@@ -22,7 +22,8 @@ $( function()
         //linkInput.val("");
     });
 
-    $('#exampleModal').on('hide.bs.modal', function () {
+    $('#exampleModal').on('hide.bs.modal', function () 
+	{
       urlInput.val("");
 	});
 
@@ -31,10 +32,11 @@ $( function()
         //console.log(data);
         return data;
     }
-    function isPositiveInteger(s){
-		     var re = /^[0-9]+$/ ;
-		     return re.test(s);
-		 }
+    function isPositiveInteger(s)
+	{
+		 var re = /^[0-9]+$/ ;
+		 return re.test(s);
+	}
 	let preW = 800;
     let preH = 400;
 
@@ -64,7 +66,7 @@ $( function()
 				console.log('fdf');
 				urlInput.addClass('redBorder');
 				$("#Continue").css("background","#DDDDDD");
-				$("#cross").show()
+				$("#cross").show();
 			};
 		}
 		else 
@@ -82,7 +84,7 @@ $( function()
     $("#layerAdd").on( "click", addNewLayer );
     $("#layerDelete").on( "click", deleteSelectedLayer );
 	$("#layerUpdate").on( "click", updateSelectedLayer );
-    $("#layerList").on( "change", function(){ loadImageMapLayer( $("#layerList").val() ) });
+    $("#layerList").on( "change", function(){ loadImageMapLayer( $("#layerList").val() ); }); 
     $("#submit").on("click", submitData);
     $("#cancel").on("click", cancelData);
     $("#shapeList").on("click change", displayData );
