@@ -219,69 +219,12 @@ function createMapDisplay( data, url )
 	  target: 'map',
 	  view: view1
 	});
-	
-	var baseTextStyle = {
-         font: '24px Calibri,sans-serif',
-         textAlign: 'center',
-         fill: new ol.style.Fill({
-           color: [0,0,0,1]
-         }),
-         stroke: new ol.style.Stroke({
-           color: [255,255,255,0.5],
-           width: 4
-         })
-       };
 
-	var changeStyle = function(feature){
-		
-		let tCoord = feature.getGeometry().getCoordinates() ;
-		//console.log(tCoord);
-		tCoord = tCoord[0];
-		//console.log(tCoord);
-		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-		var shapes = currentLayer.shapes;
-		//console.log(shapes);
-		var find = false;
-		var title = "";
-		for(var sid in shapes) {
-			var s = shapes[sid];
-			if(s.points.length!=tCoord.length)
-				continue;
-			var same = true;
-			for(var i=0; i<s.points.length; i++) {
-
-					if(s.points[i][0]!=tCoord[i][0]||s.points[i][1]!=tCoord[i][1]) {
-						same = false;
-						break;
-					}
-			}
-			if(same) {
-				find = true;
-				title = s.title;
-				break;
-			}
-		}
-		if(find) {
-			baseTextStyle.text = title;
-		} else {
-				baseTextStyle.text = "";
-		}
-			return new ol.style.Style({
-				text: new ol.style.Text(baseTextStyle),
-				stroke:new ol.style.Stroke({
-					width:5,
-					color:'#007bff'
-				}),
-
-			});
-
-	};
-
-	var selectClick = new ol.interaction.Select({
+	/*var selectClick = new ol.interaction.Select({
 		condition: ol.events.condition.mouseOnly,
 		style:changeStyle
 	});
-	map.addInteraction(selectClick);
+	map.addInteraction(selectClick);*/
 	var mouseZoom = new ol.interaction.MouseWheelZoom();
 	map.addInteraction(mouseZoom);
 	loadMapData();	
@@ -289,7 +232,7 @@ function createMapDisplay( data, url )
 	selectController = createSelectController();	
 	selectController.on( "select", handleSelection );
 	map.addInteraction( selectController );
-};
+}
 
 /*
  * Creates the map display for use within the Image Map
@@ -362,68 +305,11 @@ function createMapDisplayForViewer( data, url )
 	  view: view1
 	});
 
-	var baseTextStyle = {
-         font: '24px Calibri,sans-serif',
-         textAlign: 'center',
-         fill: new ol.style.Fill({
-           color: [0,0,0,1]
-         }),
-         stroke: new ol.style.Stroke({
-           color: [255,255,255,0.5],
-           width: 4
-         })
-       };
-
-	var changeStyle = function(feature){
-		
-		let tCoord = feature.getGeometry().getCoordinates() ;
-		//console.log(tCoord);
-		tCoord = tCoord[0];
-		//console.log(tCoord);
-		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-		var shapes = currentLayer.shapes;
-		//console.log(shapes);
-		var find = false;
-		var title = "";
-		for(var sid in shapes) {
-			var s = shapes[sid];
-			if(s.points.length!=tCoord.length)
-				continue;
-			var same = true;
-			for(var i=0; i<s.points.length; i++) {
-
-					if(s.points[i][0]!=tCoord[i][0]||s.points[i][1]!=tCoord[i][1]) {
-						same = false;
-						break;
-					}
-			}
-			if(same) {
-				find = true;
-				title = s.title;
-				break;
-			}
-		}
-		if(find) {
-			baseTextStyle.text = title;
-		} else {
-				baseTextStyle.text = "";
-		}
-			return new ol.style.Style({
-				text: new ol.style.Text(baseTextStyle),
-				stroke:new ol.style.Stroke({
-					width:5,
-					color:'#007bff'
-				}),
-
-			});
-
-	};
-
-	var selectClick = new ol.interaction.Select({
+	/*var selectClick = new ol.interaction.Select({
 		condition: ol.events.condition.mouseOnly,
 		style:changeStyle
 	});
-	map.addInteraction(selectClick);
+	map.addInteraction(selectClick);*/
 	var mouseZoom = new ol.interaction.MouseWheelZoom();
 	map.addInteraction(mouseZoom);
 	drawShapes();
@@ -432,7 +318,7 @@ function createMapDisplayForViewer( data, url )
 	selectController = createSelectController();	
 	selectController.on( "select", handleSelection );
 	map.addInteraction( selectController );
-};
+}
 
 /*
  * Clears the editor and loads all editor fields
@@ -459,8 +345,72 @@ function loadMapData()
  */
 function createSelectController()
 {
+	var baseTextStyle = {
+         font: '24px Calibri,sans-serif',
+         textAlign: 'center',
+         fill: new ol.style.Fill({
+           color: [0,0,0,1]
+         }),
+         stroke: new ol.style.Stroke({
+           color: [255,255,255,0.5],
+           width: 4
+         })
+       };
+	
+	var changeStyle = function(feature)
+	{		
+		let tCoord = feature.getGeometry().getCoordinates() ;
+		//console.log(tCoord);
+		tCoord = tCoord[0];
+		//console.log(tCoord);
+		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
+		var shapes = currentLayer.shapes;
+		//console.log(shapes);
+		var find = false;
+		var title = "";
+		for(var sid in shapes) 
+		{
+			var s = shapes[sid];
+			if(s.points.length!=tCoord.length)
+				continue;
+			var same = true;
+			for(var i=0; i<s.points.length; i++) 
+			{
+
+					if(s.points[i][0]!=tCoord[i][0]||s.points[i][1]!=tCoord[i][1]) 
+					{
+						same = false;
+						break;
+					}
+			}
+			if(same) {
+				find = true;
+				title = s.title;
+				break;
+			}
+		}
+		if(find) 
+		{
+			baseTextStyle.text = title;
+		} 
+		else 
+		{
+			baseTextStyle.text = "";
+		}
+			return new ol.style.Style({
+				text: new ol.style.Text(baseTextStyle),
+				stroke:new ol.style.Stroke({
+					width:5,
+					color:'#007bff'
+				}),
+
+			});
+
+	};
+	
 	return new ol.interaction.Select({
-	condition: ol.events.condition.click
+	condition: ol.events.condition.click,
+	style : changeStyle
 	});			
 }
 
