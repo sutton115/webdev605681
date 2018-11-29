@@ -22,7 +22,7 @@ h1
 #shapeList
 {
 	height : 120px;
-	width : 400px;
+	width : 425px;
 }
 
 #CRUDButtonList
@@ -45,13 +45,18 @@ h1
 
 #layerComponents
 {
-	margin : 0px 0px 0px 10px;
+	margin : 0px 0px 10px 10px;
 }
 
 #layerList
 {
 	width : 100px;
 	margin : 0px 10px 0px 0px;
+}
+
+#layerControls
+{
+	margin : 0px 0px 10px 0px;
 }
 
 .buttonClass
@@ -68,4 +73,9 @@ h1
 .comboBox
 {
 	width : 100px;
+}
+
+.quantityEditors
+{
+	width : 45px;
 }

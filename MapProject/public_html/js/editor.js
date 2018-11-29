@@ -81,6 +81,7 @@ $( function()
     $("#shapeDelete").on( "click", deleteSelectedShape );
     $("#layerAdd").on( "click", addNewLayer );
     $("#layerDelete").on( "click", deleteSelectedLayer );
+	$("#layerUpdate").on( "click", updateSelectedLayer );
     $("#layerList").on( "change", function(){ loadImageMapLayer( $("#layerList").val() ) });
     $("#submit").on("click", submitData);
     $("#cancel").on("click", cancelData);

@@ -78,6 +78,8 @@ function MapLayer( options )
 	this.type = 'link';
 	this.id = 0;
 	this.url = '' ;
+	this.minZoom = 1;
+	this.maxZoom = 1;
 	this.shapes = [] ;
 
 	for( let prop in options )
