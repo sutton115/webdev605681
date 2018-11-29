@@ -27,8 +27,7 @@ function displayImageMap( evt )
 			console.log( "Image Map loaded successfully" );
 			imageMap = obj;
 			
-			//Load the editor with the first layer
-			//by default
+			//Load the map layers into the viewer
 			displayImageMapLayer( 0 );
 		}	
 	}
@@ -54,7 +53,7 @@ function loadImageFromUrl(url)
     mapLayer.url = url;
     //After the image is loaded, display it on the canvas.
     imgObj.onload = function(data){
-        createMapDisplay( data, url );
+        createMapDisplayForViewer( data, url );
 
         // Add MouseWheelZoom Interaction
         var mapZoom = new ol.interaction.MouseWheelZoom() ;

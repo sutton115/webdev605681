@@ -153,6 +153,7 @@ function getSelectedShapeId()
  */
 function getLayerById( imageMap, layerId )
 {
+	//console.log( "Searching for layer with id " + layerId );
 	var mapLayers = imageMap.layers;
 	
 	return mapLayers.find( ( mapLayer ) => 
@@ -279,8 +280,6 @@ function updateSelectedLayer()
 	}	
 }
 
-
-
 /*
  * Sets the fields and appropriate
  * buttons to enabled or editable states
@@ -385,7 +384,7 @@ function deleteShape( id, removeFromStructure )
 	
 	if( feature != undefined )
 	{
-		console.log( "Removing feature from map" );
+		//console.log( "Removing feature from map" );
 		source.removeFeature( feature );
 	}
 	
@@ -467,7 +466,7 @@ function submitData()
 
 	$.getJSON({url:" https://hakureimap.appspot.com/proxy?address="+mapShape.url+"&jsoncallback=?",
 	  success: function(json){
-	    console.log(json);
+	    //console.log(json);
 			if(json==200||json==302||json==301) {
 
 				setShapeEditable( false );
@@ -827,8 +826,6 @@ function loadImageMapLayer( layerId )
 	currentLayer = layerId;
 	var mapLayer = imageMap.layers[layerId];
 	
-	console.log( imageMap );
-	
 	if( mapLayer.url != "" )
         {
 		$("#url").val( mapLayer.url ) ;
@@ -856,7 +853,7 @@ function loadShapes( shapes )
 	{
 		shape = shapes[i];
 		points = shape.points;
-		drawShape( points, shape.id );
+		drawShape( source, points, shape.id );
 		addShapeToShapeList( shape.id, shape.title );
 	}
 	
@@ -913,6 +910,10 @@ function loadLayers()
     }
 }
 
+/*
+ * Rebuilds the shape list by clearing and reconstructing it
+ *
+ */
 function refreshShapeList()
 {
 	clearShapeList();
@@ -980,4 +981,38 @@ function clearEditor()
 		deleteShape( this.value, false );
 	});
 	clearShapeEditor();
+}
+
+/*
+ * Performs validation checks to ensure that selected min
+ * and max zoom levels fall within the valid zoom ranges of
+ * the view itself and that the min zoom level does not 
+ * exceed the max zoom level and vice versa
+ */
+function validateZoomValues( zoomElement )
+{
+	//console.log( "Validating Zoom" );	
+	var view = map.getView();
+	
+	if( view != undefined )
+	{
+		if( view.getMinZoom() > $("#minZoom").val() )
+		{
+			$("#minZoom").val( view.getMinZoom() );
+		}
+		if( view.getMaxZoom() < $("#maxZoom").val() )
+		{
+			$("#maxZoom").val( view.getMaxZoom() );
+		}
+	}	
+	
+	
+	if( zoomElement.id == "minZoom" && $("#minZoom").val() > $("#maxZoom").val() )
+	{
+		$("#minZoom").val( $("#maxZoom").val() );
+	}	
+	else if( zoomElement.id == "maxZoom" && $("#maxZoom").val() < $("#minZoom").val() )
+	{
+		$("#maxZoom").val( $("#minZoom").val() );
+	}
 }

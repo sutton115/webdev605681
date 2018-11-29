@@ -88,6 +88,8 @@ $( function()
     $("#shapeList").on("click change", displayData );
     $("#saveToFile").on("click", saveToFile );
     $("#loadImageMap").on("change", loadImageMap );
+	$("#minZoom").bind( "input", function( event ){ validateZoomValues( event.target ); } );
+	$("#maxZoom").bind( "input", function( event ){ validateZoomValues( event.target ); } );
     $("#zoomlevel").on("change", function() {
 				var v = $(this).val();
 				if(isPositiveInteger(v)) {
