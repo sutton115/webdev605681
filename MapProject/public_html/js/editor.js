@@ -15,7 +15,6 @@ $( function()
     $("#pointX").attr('readonly',true);
     $("#pointY").attr('readonly',true);
     $("#shapeAdd").attr('disabled',true);
-    $("#shapeUpdate").attr('disabled',true);
     
     const urlInput = $("#url");
     $("#loadImageButton").click(function () {

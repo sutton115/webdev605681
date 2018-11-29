@@ -404,7 +404,7 @@ function setShapeEditable( bool )
     $("#submit").attr('disabled',!bool);
 	$("#cancel").attr('disabled',!bool);
     $("#shapeAdd").attr('disabled',bool);
-	$("#shapeUpdate").attr('disabled',bool);
+	$("#shapeUpdate").attr('disabled',!bool);
 	$("#shapeDelete").attr('disabled',!bool);
     $("#shapeList").attr('disabled',bool);
         
