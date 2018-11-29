@@ -351,7 +351,7 @@ function createMapDisplayForViewer( data, url )
 		maxZoom: 8
 	}) ;
 	
-	view1.on( "change:resolution", function() { onZoom(); } );
+	view1.on( "change:resolution", onZoom );
 	
 	if( map != undefined )
 		removeMapLayers();
@@ -542,4 +542,5 @@ function getZoom()
 function onZoom()
 {
 	evaluateLayerVisibility();
+	$("#zoomlevel").val(Math.floor(map.getView().getZoom()));
 }
