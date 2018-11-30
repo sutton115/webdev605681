@@ -81,15 +81,9 @@ function loadImageFromUrl(url)
             var feature = map.forEachFeatureAtPixel(evt.pixel,
                 function(feature, layer) 
 				{
-					console.log( "Feature: " );
-					console.log( feature );
                     let thisId = feature.getId();
-					console.log( "Feature Id: " );
-					console.log( thisId );
 
-                    let thisShape = getShapeById( mapLayer, thisId );
-					console.log( "Shape: " );
-					console.log( thisShape );
+                    let thisShape = getShapeById( undefined, thisId );
 					
                     if( thisShape.url )
                     {

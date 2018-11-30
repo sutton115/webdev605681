@@ -7,7 +7,7 @@
 */
 
 // Global variables so we can access them later
-var map, draw, polyMod, source, selectController ;
+var map, draw, polyMod, source, selectController, selectClick ;
 
 /*
  * Constructs a default shapePoint object

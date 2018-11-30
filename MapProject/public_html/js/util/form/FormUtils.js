@@ -167,13 +167,42 @@ function getLayerById( imageMap, layerId )
  * layer and id ( if it exists )
  */
 function getShapeById( mapLayer, shapeId )
-{
-	var shapes = mapLayer.shapes;
+{	
+	var shapes;
+	var shape;
+
+	if( mapLayer == undefined )
+	{
+		var mapLayers = imageMap.layers;
+		shapes;
+		
+		for( var i = 0; i < mapLayers.length; i++ )
+		{
+			mapLayer = mapLayers[i];
+			shapes = mapLayer.shapes;
+			
+			shape = shapes.find( ( shape ) =>
+			{
+				return ( shape.id == shapeId );
+			} );
+			
+			if( shape != undefined )
+			{
+				break;
+			}
+		}
+	}
+	else
+	{
+		shapes = mapLayer.shapes;
+		
+		shape = shapes.find( ( shape ) => 
+		{ 
+			return ( shape.id == shapeId ) 
+		} );
+	}
 	
-	return shapes.find( ( shape ) => 
-	{ 
-		return ( shape.id == shapeId ) 
-	} );
+	return shape;
 }
 
 /*
@@ -334,6 +363,7 @@ function deleteSelectedShape()
 	let deleted = deleteShape( shapeId, true );	
 	//Clear the select interaction to free shapes for disposal
 	selectController.getFeatures().clear();
+	selectClick.getFeatures().clear();
 }
 
 /*
@@ -762,7 +792,8 @@ function displayData()
                 $('#shapeUpdate').attr('disabled', false) ;
                 $('#shapeDelete').attr('disabled', false) ;
 	}
-        if (newLoad){
+        if (newLoad)
+		{
             cancelData();
             newLoad = false;
         }
@@ -831,9 +862,11 @@ function loadImageMap( evt )
 
 function baseName(str)
 {
-    if(str.includes('/')){
+    if( str.includes('/')){
         var base = new String(str).substring(str.lastIndexOf('/') + 1); 
-    }else{
+    }
+	else
+	{
         var base = new String(str).substring(str.lastIndexOf('\\') + 1); 
     }
    
@@ -849,10 +882,12 @@ function loadImageMapLayer( layerId )
 	var mapLayer = imageMap.layers[layerId];
 	
 	if( mapLayer.url != "" )
-        {
-		$("#url").val( mapLayer.url ) ;
+    {
+			$("#url").val( mapLayer.url ) ;
                 $("#Continue").click() ;
-        }else{
+    }
+	else
+	{
 		removeMapLayers();
 		clearEditor();
 		loadLayers();
