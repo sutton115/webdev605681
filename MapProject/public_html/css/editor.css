@@ -84,3 +84,23 @@ h1
 {
 	width : 45px;
 }
+
+/* The notification message box */
+.notification 
+{
+    padding: 5px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.6s;
+	text-align: center;
+}
+
+.success
+{
+	background-color: #4CAF50; /*Green*/
+}
+
+.failure
+{
+	background-color: #f44336; /*Red*/
+}
