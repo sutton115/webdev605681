@@ -303,7 +303,8 @@ function updateSelectedLayer()
 		if( mapLayer.id == layerId )
 		{
 			mapLayer.minZoom = $("#minZoom").prop('value');	
-			mapLayer.maxZoom = $("#maxZoom").prop('value');		
+			mapLayer.maxZoom = $("#maxZoom").prop('value');	
+			fireNotification( "success", "Layer Updated Successfully" );
 			break;			
 		}		
 	}	
@@ -1072,4 +1073,37 @@ function validateZoomValues( zoomElement )
 	{
 		$("#maxZoom").val( $("#minZoom").val() );
 	}
+}
+
+/*
+ * Fires a notification message of the specified
+ * type and with the specified message to the user.
+ * The type value should correspond with a css class
+ * that appropriately formats the message to be presented
+ * The duration argument determines how long ( in ms )
+ * the notification should be shown to the user.  If not
+ * provided, a default value of 1.5 s will be used 
+ */
+function fireNotification( type, msg, duration ) 
+{
+	if( duration == undefined )
+	{
+		duration = 1500;
+	}
+	var messageBox = document.getElementById( "messageBox" );
+	messageBox.innerHTML = msg;
+	messageBox.classList.add( type );
+	messageBox.style.opacity = "1";
+	setTimeout( function(){ destroyNotification( type ) }, duration );
+}
+
+/*
+ * Hides the currently displayed notification message from the
+ * view
+ */
+function destroyNotification( type ) 
+{
+	var messageBox = document.getElementById( "messageBox" );
+	messageBox.style.opacity = "0";
+	setTimeout( function(){ messageBox.classList.remove( type ); }, 600 );
 }
