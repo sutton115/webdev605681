@@ -32,6 +32,7 @@ function displayImageMap( evt )
 		}	
 	}
 	fr.readAsText( imageMapFile );
+        $(this).val('') ;
 }
 
 /*
