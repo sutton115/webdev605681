@@ -66,6 +66,7 @@ function loadImageFromUrl(url)
         }) ;
 	map.addInteraction(mapRotate);
         
+        // Allow (and always show) "northControl" to reset map orientation
         var northControl = new ol.control.Rotate({
             autoHide: false
         }) ;
