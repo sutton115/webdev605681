@@ -216,17 +216,18 @@ function addNewLayer()
 		removeMapLayers();
 	
 	clearEditor();	
-        var layerId = getSelectedLayerId();    
+    var layerId = getSelectedLayerId();    
 	var mapLayers = imageMap.layers;
-        var persistImage = mapLayers[layerId].url;
+    var persistImage = mapLayers[layerId].url;
 	var mapLayer = new MapLayer();
+	
 	mapLayer.id = mapLayers.length;	
 	mapLayer.url = persistImage;
 	//console.log( "New Map Layer id set to " + mapLayer.id );
 	mapLayers.push( mapLayer );
 	currentLayer = mapLayer.id;
 	refreshLayers();
-        loadImageMapLayer( $("#layerList").val() );
+    loadImageMapLayer( $("#layerList").val() );
 }
 
 /*
@@ -773,6 +774,9 @@ function displayData()
 	var selectedShapeId = getSelectedShapeId();
 	var shapeToLoad;
 	
+	$("#minZoom").val( selectedLayer.minZoom );	
+	$("#maxZoom").val( selectedLayer.maxZoom );
+	
 	for( var i = 0; i < shapes.length; i++ )
 	{
 		let shape = shapes[i];
@@ -892,9 +896,7 @@ function loadImageMapLayer( layerId )
 		removeMapLayers();
 		clearEditor();
 		loadLayers();
-	}
-	$("#minZoom").val( mapLayer.minZoom );	
-	$("#maxZoom").val( mapLayer.maxZoom );	
+	}	
 }
 
 /*
@@ -964,7 +966,6 @@ function loadLayers()
                 addLayerToLayerList( i );
         }
         $('#layerList').val( currentLayer );
-		
     }
 }
 
