@@ -153,6 +153,11 @@ function selectShapeById( shapeId )
 	}
 }
 
+/*
+ * Creates the openlayers objects needed to create
+ * the global map object used throughout the editor
+ * and adds the necessary interactions
+ */
 function createMapDisplay( data, url )
 {
 	const img = data.path[0];
@@ -544,6 +549,12 @@ function getZoom()
 	return zoom;
 }
 
+/*
+ * This function is called when the zoom level/resolution
+ * of the map is changed.  Reevaluates the visibility of
+ * shape features within the map and updates the zoomlevel
+ * element within the editor
+ */
 function onZoom()
 {
 	evaluateLayerVisibility();

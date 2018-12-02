@@ -10,6 +10,11 @@ $(function(){
 })
 
 
+/*
+ * Reads in an Image Map JSON file from the file
+ * system and loads the default ( 0 ) layer into the 
+ * application
+ */
 function displayImageMap( evt )
 {
 	//TODO: Handle multiple imageMaps

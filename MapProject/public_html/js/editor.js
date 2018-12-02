@@ -78,6 +78,8 @@ $( function()
                 $("#Continue").on("click", setShapeEditable( false ));
     }); // End URL input change
     
+	
+	//Add button and element listeners
     $("#shapeAdd").on( "click", addNewShape );
     $("#shapeUpdate").on( "click", updateSelectedShape );
     $("#shapeDelete").on( "click", deleteSelectedShape );
