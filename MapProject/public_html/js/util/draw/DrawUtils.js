@@ -386,49 +386,40 @@ function createMapDisplayForViewer( data, url )
 		//console.log(tCoord);
 		tCoord = tCoord[0];
 		//console.log(tCoord);
-		var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
-		var shapes = currentLayer.shapes;
-		//console.log(shapes);
-		var find = false;
+		var shape = getShapeById( undefined, feature.getId() );
 		var title = "";
-		for(var sid in shapes) 
-		{
-			var s = shapes[sid];
-			if(s.points.length!=tCoord.length)
-				continue;
+		if( shape != undefined && shape.points.length == tCoord.length )
+		{		
 			var same = true;
-			for(var i=0; i<s.points.length; i++) 
+			for( var i = 0; i < shape.points.length; i++ ) 
 			{
 
-					if(s.points[i][0]!=tCoord[i][0]||s.points[i][1]!=tCoord[i][1]) 
-					{
-						same = false;
-						break;
-					}
+				if( shape.points[i][0] != tCoord[i][0] || shape.points[i][1] != tCoord[i][1] ) 
+				{
+					same = false;
+					break;
+				}
 			}
-			if(same) {
+			if( same ) 
+			{
 				find = true;
-				title = s.title;
-				break;
+				title = shape.title;
+				baseTextStyle.text = title;
+			}
+			else 
+			{
+				baseTextStyle.text = "";
 			}
 		}
-		if(find) 
-		{
-			baseTextStyle.text = title;
-		} 
-		else 
-		{
-			baseTextStyle.text = "";
-		}
-			return new ol.style.Style({
-				text: new ol.style.Text(baseTextStyle),
-				stroke:new ol.style.Stroke({
-					width:5,
-					color:'#007bff'
-				}),
+			
+		return new ol.style.Style({
+			text: new ol.style.Text(baseTextStyle),
+			stroke:new ol.style.Stroke({
+				width:5,
+				color:'#007bff'
+			}),
 
-			});
-
+		});
 	};
 	
 	selectClick = new ol.interaction.Select({
