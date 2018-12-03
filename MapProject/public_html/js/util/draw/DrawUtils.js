@@ -372,7 +372,7 @@ function createMapDisplayForViewer( data, url )
 	  target: 'map',
 	  view: view1
 	});
-
+        
 	var baseTextStyle = {
          font: '24px Calibri,sans-serif',
          textAlign: 'center',
@@ -440,6 +440,9 @@ function createMapDisplayForViewer( data, url )
 	selectController = createSelectController();	
 	selectController.on( "select", handleSelection );
 	map.addInteraction( selectController );
+        
+        // Initially evaluate current layers at zoom level
+        onZoom();
 }
 
 /*
