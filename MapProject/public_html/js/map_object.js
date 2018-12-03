@@ -185,6 +185,7 @@ function modifyPolygon(){
     
     //function addPolyModInteraction(){
     this.start = function(newFeat){
+        $('body').addClass('modify-polygon') ;
         if(newFeat)
         {
             // must be a brand new shape
@@ -217,6 +218,8 @@ function modifyPolygon(){
         this.origCoord = 0 ;
         this.origFeat = 0 ;
         this.modInt = 0 ;
+        
+        $('body').removeClass('modify-polygon') ;
     }
 
     this.revert = function(){

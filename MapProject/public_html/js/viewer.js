@@ -81,7 +81,8 @@ function loadImageFromUrl(url)
         var fullScreen = new ol.control.FullScreen();
 	map.addControl(fullScreen);
         
-        $('#map').after('<span class="instruction">Hold Shift-key and drag-to-rotate</span>') ;
+        //$('#map').after('<span class="instruction">Hold Shift-key and drag-to-rotate</span>') ;
+        $('body').addClass('map-loaded') ;
         
         map.on('click', function(evt) {
             //console.log('map clicked');

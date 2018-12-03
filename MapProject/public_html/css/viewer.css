@@ -17,4 +17,9 @@
     float: right ;
     color: white ;
     background-color: darkgray ;
+    display: none;
+}
+
+.map-loaded .instruction {
+    display: inline-block ;
 }
