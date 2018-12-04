@@ -300,6 +300,9 @@ function createMapDisplay( data, url )
 	selectController = createSelectController();	
 	selectController.on( "select", handleSelection );
 	map.addInteraction( selectController );
+	
+	//Perform zoom evaluation upon initial load
+	onZoom();
 }
 
 /*
