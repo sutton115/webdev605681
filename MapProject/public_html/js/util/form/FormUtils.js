@@ -504,7 +504,7 @@ function submitData()
 			if(json==200||json==302||json==301) 
 			{
 				setShapeEditable( false );
-				alert("Valid URL");
+				//alert("Valid URL");
 				var currentLayer = getLayerById( imageMap, getSelectedLayerId() );
 				let added = replaceOrAddShape( currentLayer, mapShape );
 

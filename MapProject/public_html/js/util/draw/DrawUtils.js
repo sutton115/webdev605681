@@ -437,9 +437,9 @@ function createMapDisplayForViewer( data, url )
 	drawShapes();
 	//loadMapData();	
 	// create select interaction to highlight shapes when clicked
-	selectController = createSelectController();	
-	selectController.on( "select", handleSelection );
-	map.addInteraction( selectController );
+	//selectController = createSelectController();	
+	//selectController.on( "select", handleSelection );
+	//map.addInteraction( selectController );
         
         // Initially evaluate current layers at zoom level
         onZoom();
