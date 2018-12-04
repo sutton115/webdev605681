@@ -479,6 +479,7 @@ function setShapeEditable( bool )
 */
 function submitData()
 {
+        // Input validation - make sure shape is drawn and title is provided
 	if(draw){
             alert("No Polygon. Please either draw shape, or cancel.");
             return ;
