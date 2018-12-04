@@ -135,6 +135,7 @@ function addInteraction() {
     draw.on('drawend', function(e)
     {
         map.removeInteraction(draw);
+        draw = null ;
         
         // Immediately allow to modify
         polyMod = new modifyPolygon() ;

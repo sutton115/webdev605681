@@ -479,7 +479,14 @@ function setShapeEditable( bool )
 */
 function submitData()
 {
-	
+	if(draw){
+            alert("No Polygon. Please either draw shape, or cancel.");
+            return ;
+        }
+        if( !$('#shapeTitle').val() ){
+            alert("Title required in order to save shape.");
+            return ;
+        }
 	// Control actions
 	setShapeEditable( false );
 	
@@ -528,7 +535,9 @@ function submitData()
 			} 
 			else 
 			{
+                            if(mapShape.url){
 				alert("Unavailable link");
+                            }
 			}
 		}
 	});
