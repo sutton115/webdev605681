@@ -662,7 +662,10 @@ function cancelData()
 {
 	//End interaction (if any)
 	if(draw) 
+        {
 		map.removeInteraction(draw);
+                draw = null ;
+        }
 
 	//If the source is undefined, then we're likely
 	//in a freshly initialized state so nothing has 

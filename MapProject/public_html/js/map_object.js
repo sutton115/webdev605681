@@ -123,7 +123,7 @@ function addInteraction() {
     if(draw)
         map.removeInteraction(draw);
 	
-    map.removeInteraction( selectController );
+    selectController.setActive(false) ;
     
     draw = new ol.interaction.Draw({
         source: source,

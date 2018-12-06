@@ -438,12 +438,7 @@ function createMapDisplayForViewer( data, url )
 	var mouseZoom = new ol.interaction.MouseWheelZoom();
 	map.addInteraction(mouseZoom);
 	drawShapes();
-	//loadMapData();	
-	// create select interaction to highlight shapes when clicked
-	//selectController = createSelectController();	
-	//selectController.on( "select", handleSelection );
-	//map.addInteraction( selectController );
-        
+	
         // Initially evaluate current layers at zoom level
         onZoom();
 }
